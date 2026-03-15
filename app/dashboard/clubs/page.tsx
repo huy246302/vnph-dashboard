@@ -7,7 +7,7 @@ export default async function ClubsPage() {
     <div>
       <h1>Clubs</h1>
 
-      {clubs.map((club) => (
+      {clubs?.map((club) => (
         <div key={club.id}>
           {club.name}
         </div>
