@@ -7,13 +7,11 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-500 text-sm">Overview of your football database</p>
       </div>
-
       <hr className="border-gray-200" />
-
       <div className="flex flex-wrap gap-6">
-        <StatsCard title="Total Players" value={10} />
-        <StatsCard title="Total Clubs" value={15} />
-        <StatsCard title="Total Profiles" value={0} />
+        <StatsCard title="Total Players" value={10} icon="user-multiple-4" />
+        <StatsCard title="Total Clubs"   value={15} icon="trophy-1" />
+        <StatsCard title="Total Profiles" value={0} icon="target-user" />
       </div>
     </div>
   );
