@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase-client";
 
 export async function getDashboardStats() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const [players, clubs] = await Promise.all([
     supabase.from("players").select("*", { count: "exact", head: true }),
     supabase.from("clubs").select("*", { count: "exact", head: true }),
