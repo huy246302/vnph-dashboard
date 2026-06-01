@@ -7,6 +7,6 @@ export async function getPlayers() {
     .select("*");
 
   if (error) throw error;
-  console.log(data); // ← check your terminal output
+
   return data;
 }
