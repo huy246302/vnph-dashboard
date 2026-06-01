@@ -27,7 +27,9 @@ export default async function PlayersPage() {
                             <td className="py-4 px-3">{player.full_name}</td>
                             <td className="py-4 px-3">{player.position}</td>
                             <td className="py-4 px-3">{player.current_club}</td>
-                            <td className="py-4 px-3">{player.birth_date}</td>
+                            <td className="px-4 py-3">
+                                {new Date(player.birth_date).toLocaleDateString("vi-VN")}
+                            </td>
                             <td className="py-4 px-3">{player.height_cm}</td>
                             <td className="py-4 px-3">{player.preferred_foot}</td>
                         </tr>
