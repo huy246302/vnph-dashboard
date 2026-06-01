@@ -19,6 +19,8 @@ export default async function PlayersPage() {
                         <th className="py-4 px-3">Birth Date</th>
                         <th className="py-4 px-3">Height</th>
                         <th className="py-4 px-3">Preferred foot</th>
+                        <th className="py-4 px-3">Club jersey number</th>
+                        <th className="py-4 px-3">Nationality</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +34,8 @@ export default async function PlayersPage() {
                             </td>
                             <td className="py-4 px-3">{player.height_cm}</td>
                             <td className="py-4 px-3">{player.preferred_foot}</td>
+                            <td className="py-4 px-3">{player.club_jersey_number}</td>
+                            <td className="py-4 px-3">{player.nationality}</td>
                         </tr>
                         ))}
                 </tbody>
