@@ -1,6 +1,9 @@
 import StatsCard from "@/components/StatsCard";
+import { getDashboardStats } from "@/lib/db/dashboard";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const { totalPlayers, totalClubs, totalProfiles } = await getDashboardStats();
+
   return (
     <div className="px-8 py-10 flex flex-col gap-4">
       <div className="flex flex-col gap-1">
@@ -9,9 +12,9 @@ export default function DashboardPage() {
       </div>
       <hr className="border-gray-200" />
       <div className="flex flex-wrap gap-6">
-        <StatsCard title="Total Players" value={10} icon="user-multiple-4" />
-        <StatsCard title="Total Clubs"   value={15} icon="trophy-1" />
-        <StatsCard title="Total Profiles" value={0} icon="target-user" />
+        <StatsCard title="Total Players" value={totalPlayers} icon="user-multiple-4" />
+        <StatsCard title="Total Clubs"   value={totalClubs} icon="trophy-1" />
+        <StatsCard title="Total Profiles" value={totalProfiles} icon="target-user" />
       </div>
     </div>
   );
