@@ -22,7 +22,7 @@ export default async function PlayersPage() {
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1100px] text-sm">
+            <table className="w-full min-w-275 text-sm">
               <thead className="sticky top-0 bg-gray-100 z-10">
                 <tr className="text-gray-700 uppercase text-xs">
                   <th className="px-5 py-4 text-left">
