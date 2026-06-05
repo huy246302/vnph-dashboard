@@ -1,4 +1,6 @@
 import { getProfiles } from "@/lib/db/profiles";
+import{ createProfile } from "@/lib/actions/profiles";
+import CreateButton from "@/components/CreateButton";
 import PageContainer from "@/components/PageContainer";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
@@ -8,10 +10,24 @@ export default async function ProfilesPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Profiles"
-        description={`All registered profiles (${profiles.length})`}
-      />
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-1">
+          <PageHeader
+            title="Profiles"
+            description={`All registered profiles (${profiles.length})`}
+          />
+        </div>
+        <CreateButton
+          label="Add Profile"
+          modalTitle="Add New Profile"
+          action={createProfile}
+          fields={[
+            { name: "username", label: "Username", required: true, placeholder: "john_doe" },
+            { name: "full_name", label: "Full Name", required: true, placeholder: "John Doe" },
+            { name: "role", label: "Role", required: true, placeholder: "user" },
+          ]}
+        />
+      </div>
       <TableWrapper>
         <table className="w-full text-sm text-left border border-gray-200 rounded-xl overflow-hidden">
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
