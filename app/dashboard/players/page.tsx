@@ -1,12 +1,27 @@
 import { getPlayers } from "@/lib/db/players";
-import { createPlayer } from "@/lib/actions/players"
+import { createPlayer, updatePlayer, deletePlayer } from "@/lib/actions/players";
 import CreateButton from "@/components/CreateButton";
+import RowActions from "@/components/RowActions";
 import PageContainer from "@/components/PageContainer";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
 
 export default async function PlayersPage() {
   const players = await getPlayers();
+  
+  const playerFields = [
+    { name: "full_name", label: "Full Name", required: true, span: 2 as const, placeholder: "Nguyễn Văn A" },
+    { name: "short_name", label: "Short Name", placeholder: "Văn A" },
+    { name: "nationality", label: "Nationality" },
+    { name: "birth_date", label: "Birth Date", type: "date" as const },
+    { name: "position", label: "Position", type: "select" as const, options: ["Thủ môn", "Hậu vệ", "Tiền vệ", "Tiền đạo"] },
+    { name: "height_cm", label: "Height (cm)", type: "number" as const },
+    { name: "preferred_foot", label: "Preferred Foot", type: "select" as const, options: ["left", "right", "both"] },
+    { name: "current_club", label: "Current Club" },
+    { name: "club_jersey_number", label: "Jersey Number", type: "number" as const },
+    { name: "bio", label: "Bio", type: "textarea" as const, span: 2 as const },
+  ];
+
   const positionColors: Record<string, string> = {
     "Thủ môn": "bg-yellow-100 text-yellow-800",
     "Tiền đạo": "bg-red-100 text-red-800",
@@ -69,6 +84,9 @@ export default async function PlayersPage() {
               <th className="px-5 py-4 text-left">
                 Nationality
               </th>
+              <th className="px-4 py-3">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -116,6 +134,17 @@ export default async function PlayersPage() {
                 </td>
                 <td className="px-5 py-4">
                   {player.nationality}
+                </td>
+                <td className="px-4 py-3">
+                  <RowActions
+                    id={player.id}
+                    deleteAction={deletePlayer}
+                    updateAction={updatePlayer}
+                    fields={playerFields.map((f) => ({
+                      ...f,
+                      defaultValue: String(player[f.name as keyof typeof player] ?? ""),
+                    }))}
+                  />
                 </td>
               </tr>
             ))}

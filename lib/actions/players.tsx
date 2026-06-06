@@ -1,10 +1,10 @@
 "use server";
 
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 import { revalidatePath } from "next/cache";
 
 export async function createPlayer(formData: FormData) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const full_name = formData.get("full_name") as string;
   const slug = full_name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -26,5 +26,30 @@ export async function createPlayer(formData: FormData) {
   const { error } = await supabase.from("players").insert(payload);
   if (error) throw new Error(error.message);
 
+  revalidatePath("/dashboard/players");
+}
+
+export async function updatePlayer(id: string, formData: FormData) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("players").update({
+    full_name: formData.get("full_name"),
+    short_name: formData.get("short_name") || null,
+    nationality: formData.get("nationality") || null,
+    birth_date: formData.get("birth_date") || null,
+    position: formData.get("position") || null,
+    height_cm: formData.get("height_cm") ? Number(formData.get("height_cm")) : null,
+    preferred_foot: formData.get("preferred_foot") || null,
+    current_club: formData.get("current_club") || null,
+    club_jersey_number: formData.get("club_jersey_number") ? Number(formData.get("club_jersey_number")) : null,
+    bio: formData.get("bio") || null,
+  }).eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/dashboard/players");
+}
+
+export async function deletePlayer(id: string) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("players").delete().eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/dashboard/players");
 }

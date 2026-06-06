@@ -1,6 +1,7 @@
 import { getClubs } from "@/lib/db/clubs";
-import { createClub } from "@/lib/actions/clubs";
+import { createClub, updateClub, deleteClub } from "@/lib/actions/clubs";
 import CreateButton from "@/components/CreateButton";
+import RowActions from "@/components/RowActions";
 import PageContainer from "@/components/PageContainer";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";

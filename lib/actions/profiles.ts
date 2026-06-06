@@ -31,3 +31,23 @@ export async function createProfile(formData: FormData) {
 
   revalidatePath("/dashboard/profiles");
 }
+
+export async function updateProfile(id: string, formData: FormData) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("profiles").update({
+    username: formData.get("username") || null,
+    full_name: formData.get("full_name") || null,
+    avatar_url: formData.get("avatar_url") || null,
+    role: formData.get("role") || "user",
+  }).eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/dashboard/profiles");
+}
+
+export async function deleteProfile(id: string) {
+  const supabase = createAdminClient();
+  // delete auth user which cascades to profile
+  const { error } = await supabase.auth.admin.deleteUser(id);
+  if (error) throw new Error(error.message);
+  revalidatePath("/dashboard/profiles");
+}
