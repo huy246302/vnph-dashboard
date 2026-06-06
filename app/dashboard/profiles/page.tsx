@@ -23,7 +23,7 @@ export default async function ProfilesPage() {
           action={createProfile}
           fields={[
             { name: "email", label: "Email", required: true, span: 2, placeholder: "user@example.com" },
-            { name: "password", label: "Password", required: true, span: 2, placeholder: "Min 6 characters" },
+            { name: "password", label: "Password", type: "password", required: true, span: 2, placeholder: "Min 6 characters" },
             { name: "username", label: "Username", placeholder: "nguyen_van_a" },
             { name: "full_name", label: "Full Name", placeholder: "Nguyễn Văn A" },
             { name: "role", label: "Role", type: "select", options: ["user", "admin"] },

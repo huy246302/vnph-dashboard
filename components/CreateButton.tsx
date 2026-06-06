@@ -6,7 +6,7 @@ import Modal from "@/components/Modal";
 type Field = {
   name: string;
   label: string;
-  type?: "text" | "number" | "date" | "textarea" | "select";
+  type?: "text" | "number" | "date" | "textarea" | "select" | "password";
   options?: string[];
   placeholder?: string;
   defaultValue?: string;
@@ -56,7 +56,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
       </button>
 
       <Modal open={open} onClose={() => setOpen(false)} title={modalTitle}>
-        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form ref={formRef} onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-3">
             {fields.map((field) => (
               <div key={field.name} className={field.span === 2 ? "col-span-2" : ""}>
@@ -84,6 +84,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
                     required={field.required}
                     placeholder={field.placeholder}
                     defaultValue={field.defaultValue}
+                    autoComplete={field.type === "password" ? "new-password" : "off"}
                     className={inputClass}
                   />
                 )}
