@@ -1,12 +1,40 @@
 import { getProfiles } from "@/lib/db/profiles";
-import{ createProfile } from "@/lib/actions/profiles";
+import{ createProfile, updateProfile, deleteProfile } from "@/lib/actions/profiles";
 import CreateButton from "@/components/CreateButton";
+import RowActions from "@/components/RowActions";
 import PageContainer from "@/components/PageContainer";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
 
 export default async function ProfilesPage() {
   const profiles = await getProfiles();
+
+  const profileFields = [
+  {
+    name: "username",
+    label: "Username",
+    required: true,
+    placeholder: "nguyenvana",
+  },
+  {
+    name: "full_name",
+    label: "Full Name",
+    required: true,
+    span: 2 as const,
+    placeholder: "Nguyễn Văn A",
+  },
+  {
+    name: "role",
+    label: "Role",
+    type: "select" as const,
+    options: ["admin", "user"],
+  },
+  {
+    name: "created_at",
+    label: "Created At",
+    type: "date" as const,
+  },
+];
 
   return (
     <PageContainer>
@@ -39,6 +67,7 @@ export default async function ProfilesPage() {
               <th className="px-4 py-3">Full Name</th>
               <th className="px-4 py-3">Role</th>
               <th className="px-4 py-3">Created At</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -57,6 +86,17 @@ export default async function ProfilesPage() {
                 </td>
                 <td className="px-4 py-3">
                   {new Date(profile.created_at).toLocaleDateString("en-GB")}
+                </td>
+                <td className="px-4 py-3">
+                  <RowActions
+                    id={profile.id}
+                    deleteAction={deleteProfile}
+                    updateAction={updateProfile}
+                    fields={profileFields.map((f) => ({
+                      ...f,
+                      defaultValue: String(profile[f.name as keyof typeof profile] ?? ""),
+                    }))}
+                  />
                 </td>
               </tr>
             ))}

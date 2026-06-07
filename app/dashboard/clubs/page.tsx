@@ -9,6 +9,37 @@ import TableWrapper from "@/components/TableWrapper";
 export default async function ClubsPage() {
   const clubs = await getClubs();
 
+  const clubFields = [
+    {
+      name: "name",
+      label: "Club Name",
+      required: true,
+      span: 2 as const,
+      placeholder: "Manchester United",
+    },
+    {
+      name: "short_name",
+      label: "Short Name",
+      placeholder: "MU",
+    },
+    {
+      name: "league",
+      label: "League",
+      placeholder: "Premier League",
+    },
+    {
+      name: "stadium",
+      label: "Stadium",
+      placeholder: "Old Trafford",
+    },
+    {
+      name: "founded_year",
+      label: "Founded Year",
+      type: "number" as const,
+      placeholder: "1878",
+    },
+  ];
+
   return (
     <PageContainer>
       <div className="flex items-start justify-between">
@@ -41,6 +72,7 @@ export default async function ClubsPage() {
               <th className="px-4 py-3">League</th>
               <th className="px-4 py-3">Stadium</th>
               <th className="px-4 py-3">Founded</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +83,17 @@ export default async function ClubsPage() {
                 <td className="px-4 py-3">{club.league ?? "—"}</td>
                 <td className="px-4 py-3">{club.stadium ?? "—"}</td>
                 <td className="px-4 py-3">{club.founded_year ?? "—"}</td>
+                <td className="px-4 py-3">
+                  <RowActions
+                    id={club.id}
+                    deleteAction={deleteClub}
+                    updateAction={updateClub}
+                    fields={clubFields.map((f) => ({
+                      ...f,
+                      defaultValue: String(club[f.name as keyof typeof club] ?? ""),
+                    }))}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
