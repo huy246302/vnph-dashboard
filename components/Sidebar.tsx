@@ -41,7 +41,7 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 h-screen border-r p-5 overflow-y-auto flex-shrink-0">
+    <aside className="w-64 h-screen border-r p-5 overflow-y-auto shrink-0">
       <div className="mb-8">
         <h2 className="text-xl font-bold">Football DB</h2>
         <p className="text-sm text-gray-500">Admin Dashboard</p>
