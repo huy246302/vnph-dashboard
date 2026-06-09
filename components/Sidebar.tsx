@@ -13,28 +13,28 @@ const navSections = [
       { name: "Profiles", href: "/dashboard/profiles" },
     ],
   },
-  {
-    title: "Reference",
-    items: [
-      { name: "National Teams", href: "/dashboard/national-teams" },
-      { name: "Trophies", href: "/dashboard/trophies" },
-      { name: "Awards", href: "/dashboard/awards" },
-    ],
-  },
-  {
-    title: "Player Records",
-    items: [
-      { name: "Club History", href: "/dashboard/club-history" },
-      { name: "Career Stats", href: "/dashboard/career-stats" },
-      { name: "National Team Caps", href: "/dashboard/national-team-caps" },
-      { name: "Player Trophies", href: "/dashboard/player-trophies" },
-      { name: "Player Awards", href: "/dashboard/player-awards" },
-      { name: "Career Events", href: "/dashboard/career-events" },
-      { name: "Media", href: "/dashboard/media" },
-      { name: "Nicknames", href: "/dashboard/nicknames" },
-      { name: "Positions", href: "/dashboard/positions" },
-    ],
-  },
+  // {
+  //   title: "Reference",
+  //   items: [
+  //     { name: "National Teams", href: "/dashboard/national-teams" },
+  //     { name: "Trophies", href: "/dashboard/trophies" },
+  //     { name: "Awards", href: "/dashboard/awards" },
+  //   ],
+  // },
+  // {
+  //   title: "Player Records",
+  //   items: [
+  //     { name: "Club History", href: "/dashboard/club-history" },
+  //     { name: "Career Stats", href: "/dashboard/career-stats" },
+  //     { name: "National Team Caps", href: "/dashboard/national-team-caps" },
+  //     { name: "Player Trophies", href: "/dashboard/player-trophies" },
+  //     { name: "Player Awards", href: "/dashboard/player-awards" },
+  //     { name: "Career Events", href: "/dashboard/career-events" },
+  //     { name: "Media", href: "/dashboard/media" },
+  //     { name: "Nicknames", href: "/dashboard/nicknames" },
+  //     { name: "Positions", href: "/dashboard/positions" },
+  //   ],
+  // },
 ];
 
 export default function Sidebar() {
