@@ -16,6 +16,7 @@ type Field = {
 
 type Props = {
   id: string;
+  label?: string;          // shown in delete confirm: "Delete Hà Nội FC?"
   fields: Field[];
   deleteAction: (id: string) => Promise<void>;
   updateAction: (id: string, formData: FormData) => Promise<void>;
@@ -25,11 +26,11 @@ const inputClass =
   "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition";
 const labelClass = "block text-xs font-medium text-gray-600 mb-1";
 
-export default function RowActions({ id, fields, deleteAction, updateAction }: Props) {
-  const [editOpen, setEditOpen] = useState(false);
+export default function RowActions({ id, label, fields, deleteAction, updateAction }: Props) {
+  const [editOpen, setEditOpen]     = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
@@ -61,15 +62,15 @@ export default function RowActions({ id, fields, deleteAction, updateAction }: P
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-1">
         <button
-          onClick={() => setEditOpen(true)}
+          onClick={() => { setError(null); setEditOpen(true); }}
           className="px-3 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
         >
           Edit
         </button>
         <button
-          onClick={() => setDeleteOpen(true)}
+          onClick={() => { setError(null); setDeleteOpen(true); }}
           className="px-3 py-1 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
         >
           Delete
@@ -83,7 +84,7 @@ export default function RowActions({ id, fields, deleteAction, updateAction }: P
             {fields.map((field) => (
               <div key={field.name} className={field.span === 2 ? "col-span-2" : ""}>
                 <label className={labelClass}>
-                  {field.label} {field.required && "*"}
+                  {field.label} {field.required && <span className="text-red-400">*</span>}
                 </label>
                 {field.type === "textarea" ? (
                   <textarea
@@ -138,13 +139,17 @@ export default function RowActions({ id, fields, deleteAction, updateAction }: P
       <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)} title="Confirm Delete">
         <div className="flex flex-col gap-4">
           <p className="text-sm text-gray-600">
-            Are you sure you want to delete this record? This action cannot be undone.
+            Are you sure you want to delete{" "}
+            {label ? <span className="font-medium text-gray-900">&quot;{label}&quot;</span> : "this record"}?
+            {" "}This action cannot be undone.
           </p>
+
           {error && (
             <p className="text-red-500 text-xs bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
+
           <div className="flex justify-end gap-2">
             <button onClick={() => setDeleteOpen(false)}
               className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors">
