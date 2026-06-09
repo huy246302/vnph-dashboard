@@ -39,8 +39,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 vnph-dashboard
 ├─ app
 │  ├─ dashboard
+│  │  ├─ clubs
+│  │  │  └─ page.tsx
 │  │  ├─ layout.tsx
-│  │  └─ page.tsx
+│  │  ├─ page.tsx
+│  │  ├─ players
+│  │  │  └─ page.tsx
+│  │  └─ profiles
+│  │     └─ page.tsx
 │  ├─ favicon.ico
 │  ├─ globals.css
 │  ├─ layout.tsx
@@ -48,14 +54,26 @@ vnph-dashboard
 │  └─ test
 │     └─ page.tsx
 ├─ components
+│  ├─ CreateButton.tsx
+│  ├─ Modal.tsx
+│  ├─ PageContainer.tsx
+│  ├─ PageHeader.tsx
+│  ├─ RowActions.tsx
 │  ├─ Sidebar.tsx
-│  └─ StatsCard.tsx
+│  ├─ StatsCard.tsx
+│  └─ TableWrapper.tsx
 ├─ eslint.config.mjs
 ├─ lib
+│  ├─ actions
+│  │  ├─ clubs.ts
+│  │  ├─ players.ts
+│  │  └─ profiles.ts
 │  ├─ db
 │  │  ├─ clubs.ts
 │  │  ├─ dashboard.ts
-│  │  └─ players.ts
+│  │  ├─ players.ts
+│  │  └─ profiles.ts
+│  ├─ supabase-admin.ts
 │  ├─ supabase-client.ts
 │  └─ supabase-server.ts
 ├─ next.config.ts
