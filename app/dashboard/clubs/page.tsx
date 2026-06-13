@@ -87,7 +87,7 @@ export default async function ClubsPage() {
                       id={club.id}
                       label={club.name}
                       deleteAction={deleteClub}
-                      updateAction={updateClub}
+                      updateAction={updateClub.bind(null, club.id)}
                       fields={clubFields.map((f) => ({
                         ...f,
                         defaultValue: String(club[f.name as keyof typeof club] ?? ""),

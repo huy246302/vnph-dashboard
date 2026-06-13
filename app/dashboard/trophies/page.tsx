@@ -100,7 +100,7 @@ export default async function TrophiesPage() {
                       id={trophy.id}
                       label={trophy.name}
                       deleteAction={deleteTrophy}
-                      updateAction={updateTrophy}
+                      updateAction={updateTrophy.bind(null, trophy.id)}
                       fields={trophyFields.map((f) => ({
                         ...f,
                         defaultValue: String(trophy[f.name as keyof typeof trophy] ?? ""),

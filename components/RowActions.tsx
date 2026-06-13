@@ -18,12 +18,10 @@ type Field = {
 type Props = {
   id: string;
   label?: string;
-  // Pass editHref to link to a dedicated edit page (e.g. players)
-  // Pass fields + updateAction to use the inline modal (e.g. clubs, trophies)
   editHref?: string;
   fields?: Field[];
   deleteAction: (id: string) => Promise<void>;
-  updateAction?: (id: string, formData: FormData) => Promise<void>;
+  updateAction?: (formData: FormData) => Promise<void>; // ← remove id: string
 };
 
 const inputClass =
@@ -44,7 +42,7 @@ export default function RowActions({
     setLoading(true);
     setError(null);
     try {
-      await updateAction(id, new FormData(e.currentTarget));
+      await updateAction(new FormData(e.currentTarget)); // ← no id argument
       setEditOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");

@@ -89,7 +89,7 @@ export default async function AwardsPage() {
                       id={award.id}
                       label={award.name}
                       deleteAction={deleteAward}
-                      updateAction={updateAward}
+                      updateAction={updateAward.bind(null, award.id)}
                       fields={awardFields.map((f) => ({
                         ...f,
                         defaultValue: String(award[f.name as keyof typeof award] ?? ""),

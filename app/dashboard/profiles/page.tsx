@@ -91,7 +91,7 @@ export default async function ProfilesPage() {
                   <RowActions
                     id={profile.id}
                     deleteAction={deleteProfile}
-                    updateAction={updateProfile}
+                    updateAction={updateProfile.bind(null, profile.id)}
                     fields={profileFields.map((f) => ({
                       ...f,
                       defaultValue: String(profile[f.name as keyof typeof profile] ?? ""),

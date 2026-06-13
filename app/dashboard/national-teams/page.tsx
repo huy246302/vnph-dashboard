@@ -79,7 +79,7 @@ export default async function NationalTeamsPage() {
                       id={team.id}
                       label={team.name}
                       deleteAction={deleteNationalTeam}
-                      updateAction={updateNationalTeam}
+                      updateAction={updateNationalTeam.bind(null, team.id)}
                       fields={nationalTeamFields.map((f) => ({
                         ...f,
                         defaultValue: String(team[f.name as keyof typeof team] ?? ""),
