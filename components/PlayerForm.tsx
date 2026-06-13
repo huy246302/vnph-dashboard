@@ -5,19 +5,16 @@ import { useRouter } from "next/navigation";
 import Img from "next/image";
 
 type PlayerFormData = {
-  // Identity
   full_name: string;
   short_name: string;
   birth_date: string;
   birth_place: string;
   nationality: string;
   position: string;
-  // Physical
   height_cm: string;
   weight_kg: string;
   preferred_foot: string;
   primary_era: string;
-  // Career
   career_start_year: string;
   career_end_year: string;
   is_retired: boolean;
@@ -25,7 +22,6 @@ type PlayerFormData = {
   bio: string;
   legacy_bio: string;
   playing_style: string;
-  // Media
   profile_image_url: string;
 };
 
@@ -50,8 +46,8 @@ const ERA_OPTIONS = [
 export default function PlayerForm({ initialData, action, submitLabel }: Props) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Identity");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState<string | null>(null);
 
   const [form, setForm] = useState<PlayerFormData>({
     full_name:         initialData?.full_name         ?? "",
@@ -90,7 +86,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)));
       await action(fd);
-      router.push("/dashboard/players");
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -117,9 +113,8 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
         ))}
       </div>
 
-      {/* Tab content */}
       <div className="p-6">
-        {/* ── IDENTITY ── */}
+        {/* IDENTITY */}
         {activeTab === "Identity" && (
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
@@ -164,20 +159,18 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
           </div>
         )}
 
-        {/* ── PHYSICAL ── */}
+        {/* PHYSICAL */}
         {activeTab === "Physical" && (
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Height (cm)</label>
               <input type="number" className={inputClass} value={form.height_cm}
-                onChange={(e) => set("height_cm", e.target.value)}
-                placeholder="175" />
+                onChange={(e) => set("height_cm", e.target.value)} placeholder="175" />
             </div>
             <div>
               <label className={labelClass}>Weight (kg)</label>
               <input type="number" className={inputClass} value={form.weight_kg}
-                onChange={(e) => set("weight_kg", e.target.value)}
-                placeholder="70" />
+                onChange={(e) => set("weight_kg", e.target.value)} placeholder="70" />
             </div>
             <div>
               <label className={labelClass}>Preferred Foot</label>
@@ -202,20 +195,18 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
           </div>
         )}
 
-        {/* ── CAREER ── */}
+        {/* CAREER */}
         {activeTab === "Career" && (
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Career Start Year</label>
               <input type="number" className={inputClass} value={form.career_start_year}
-                onChange={(e) => set("career_start_year", e.target.value)}
-                placeholder="1990" />
+                onChange={(e) => set("career_start_year", e.target.value)} placeholder="1990" />
             </div>
             <div>
               <label className={labelClass}>Career End Year</label>
               <input type="number" className={inputClass} value={form.career_end_year}
-                onChange={(e) => set("career_end_year", e.target.value)}
-                placeholder="2005" />
+                onChange={(e) => set("career_end_year", e.target.value)} placeholder="2005" />
             </div>
             <div className="col-span-2 flex items-center gap-3">
               <button
@@ -235,8 +226,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
               <div>
                 <label className={labelClass}>Retirement Year</label>
                 <input type="number" className={inputClass} value={form.retired_year}
-                  onChange={(e) => set("retired_year", e.target.value)}
-                  placeholder="2005" />
+                  onChange={(e) => set("retired_year", e.target.value)} placeholder="2005" />
               </div>
             )}
             <div className="col-span-2">
@@ -260,7 +250,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
           </div>
         )}
 
-        {/* ── MEDIA ── */}
+        {/* MEDIA */}
         {activeTab === "Media" && (
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
@@ -275,6 +265,8 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
                 <Img
                   src={form.profile_image_url}
                   alt="Profile preview"
+                  width={96}
+                  height={96}
                   className="w-24 h-24 object-cover rounded-xl border border-gray-200"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -283,21 +275,13 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
           </div>
         )}
 
-        {/* Error */}
         {error && (
           <p className="mt-4 text-red-500 text-xs bg-red-50 border border-red-200 rounded-lg px-3 py-2">
             {error}
           </p>
         )}
 
-        {/* Actions */}
-        <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-100">
-          <button
-            onClick={() => router.push("/dashboard/players")}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            Cancel
-          </button>
+        <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
           <button
             onClick={handleSubmit}
             disabled={loading}
