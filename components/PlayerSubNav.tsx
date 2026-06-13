@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 const SUB_NAV = [
   { name: "Edit",          href: "edit" },
-  { name: "Positions",     href: "positions" },
   { name: "Nicknames",     href: "nicknames" },
   { name: "Club History",  href: "club-history" },
   { name: "National Team", href: "national-team" },
