@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,6 +7,7 @@ const SUB_NAV = [
   { name: "Nicknames",     href: "nicknames" },
   { name: "Club History",  href: "club-history" },
   { name: "National Team", href: "national-team" },
+  { name: "Stats Cards",   href: "stats-cards" },
   { name: "Trophies",      href: "trophies" },
   { name: "Awards",        href: "awards" },
   { name: "Career Events", href: "career-events" },

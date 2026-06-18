@@ -39,13 +39,28 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 vnph-dashboard
 ├─ app
 │  ├─ dashboard
+│  │  ├─ awards
+│  │  │  └─ page.tsx
 │  │  ├─ clubs
 │  │  │  └─ page.tsx
 │  │  ├─ layout.tsx
+│  │  ├─ national-teams
+│  │  │  └─ page.tsx
 │  │  ├─ page.tsx
 │  │  ├─ players
+│  │  │  ├─ new
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ page.tsx
+│  │  │  └─ [id]
+│  │  │     ├─ edit
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ layout.tsx
+│  │  │     ├─ nicknames
+│  │  │     │  └─ page.tsx
+│  │  │     └─ page.tsx
+│  │  ├─ profiles
 │  │  │  └─ page.tsx
-│  │  └─ profiles
+│  │  └─ trophies
 │  │     └─ page.tsx
 │  ├─ favicon.ico
 │  ├─ globals.css
@@ -58,6 +73,9 @@ vnph-dashboard
 │  ├─ Modal.tsx
 │  ├─ PageContainer.tsx
 │  ├─ PageHeader.tsx
+│  ├─ PlayerForm.tsx
+│  ├─ PlayerSubNav.tsx
+│  ├─ PlayerTable.tsx
 │  ├─ RowActions.tsx
 │  ├─ Sidebar.tsx
 │  ├─ StatsCard.tsx
@@ -65,14 +83,22 @@ vnph-dashboard
 ├─ eslint.config.mjs
 ├─ lib
 │  ├─ actions
+│  │  ├─ awards.ts
 │  │  ├─ clubs.ts
+│  │  ├─ national-teams.ts
+│  │  ├─ player-nicknames.ts
 │  │  ├─ players.ts
-│  │  └─ profiles.ts
+│  │  ├─ profiles.ts
+│  │  └─ trophies.ts
 │  ├─ db
+│  │  ├─ awards.ts
 │  │  ├─ clubs.ts
 │  │  ├─ dashboard.ts
+│  │  ├─ national-team.ts
+│  │  ├─ player-nicknames.ts
 │  │  ├─ players.ts
-│  │  └─ profiles.ts
+│  │  ├─ profiles.ts
+│  │  └─ tropies.ts
 │  ├─ supabase-admin.ts
 │  ├─ supabase-client.ts
 │  └─ supabase-server.ts
