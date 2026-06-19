@@ -8,11 +8,29 @@ type StatsCardData = {
   year_to: string;
   is_verified: boolean;
   notes: string;
-  speed: string; acceleration: string; stamina: string; balance: string; jumping: string; heading: string;
-  attack: string; defense: string; aggression: string; reaction: string;
-  passing: string; dribbling: string; ball_control: string; technique: string; finishing: string;
-  shot_power: string; long_range: string; positioning: string;
-  gk_catching: string; gk_diving: string; gk_reflexes: string; gk_reach: string;
+
+  // Technical (14)
+  corners: string; crossing: string; dribbling: string; finishing: string;
+  first_touch: string; free_kick_taking: string; heading: string;
+  long_shots: string; long_throws: string; marking: string; passing: string;
+  penalty_taking: string; tackling: string; technique: string;
+
+  // Mental (14)
+  aggression: string; anticipation: string; bravery: string; composure: string;
+  concentration: string; decisions: string; determination: string; flair: string;
+  leadership: string; off_the_ball: string; positioning: string; teamwork: string;
+  vision: string; work_rate: string;
+
+  // Physical (8)
+  acceleration: string; agility: string; balance: string; jumping_reach: string;
+  natural_fitness: string; pace: string; stamina: string; strength: string;
+
+  // Goalkeeping (13 incl. gk_first_touch/gk_passing)
+  gk_aerial_reach: string; gk_command_of_area: string; gk_communication: string;
+  gk_eccentricity: string; gk_first_touch: string; gk_handling: string;
+  gk_kicking: string; gk_one_on_ones: string; gk_passing: string;
+  gk_tendency_to_punch: string; gk_reflexes: string; gk_rushing_out: string;
+  gk_throwing: string;
 };
 
 type Props = {
@@ -23,74 +41,100 @@ type Props = {
 };
 
 const inputClass =
-  "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white";
+  "w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white";
 const labelClass = "block text-xs font-medium text-gray-600 mb-1";
 
-const GROUPS: { title: string; fields: { key: keyof StatsCardData; label: string }[] }[] = [
-  {
-    title: "Physical",
-    fields: [
-      { key: "speed",        label: "Speed" },
-      { key: "acceleration", label: "Acceleration" },
-      { key: "stamina",      label: "Stamina" },
-      { key: "balance",      label: "Balance" },
-      { key: "jumping",      label: "Jumping" },
-    ],
-  },
-  {
-    title: "Technical",
-    fields: [
-      { key: "passing",      label: "Passing" },
-      { key: "dribbling",    label: "Dribbling" },
-      { key: "ball_control", label: "Ball Control" },
-      { key: "technique",    label: "Technique" },
-      { key: "finishing",    label: "Finishing" },
-    ],
-  },
-  {
-    title: "Mental",
-    fields: [
-      { key: "attack",     label: "Attack" },
-      { key: "defense",    label: "Defense" },
-      { key: "aggression", label: "Aggression" },
-      { key: "reaction",   label: "Reaction" },
-      { key: "positioning",label: "Positioning" },
-    ],
-  },
-  {
-    title: "Shooting",
-    fields: [
-      { key: "shot_power", label: "Shot Power" },
-      { key: "long_range", label: "Long Range" },
-      { key: "heading",    label: "Heading" },
-    ],
-  },
+type FieldDef = { key: keyof StatsCardData; label: string };
+
+const TECHNICAL: FieldDef[] = [
+  { key: "corners",          label: "Corners" },
+  { key: "crossing",         label: "Crossing" },
+  { key: "dribbling",        label: "Dribbling" },
+  { key: "finishing",        label: "Finishing" },
+  { key: "first_touch",      label: "First Touch" },
+  { key: "free_kick_taking", label: "Free Kick Taking" },
+  { key: "heading",          label: "Heading" },
+  { key: "long_shots",       label: "Long Shots" },
+  { key: "long_throws",      label: "Long Throws" },
+  { key: "marking",          label: "Marking" },
+  { key: "passing",          label: "Passing" },
+  { key: "penalty_taking",   label: "Penalty Taking" },
+  { key: "tackling",         label: "Tackling" },
+  { key: "technique",        label: "Technique" },
 ];
 
-const GK_GROUP = {
-  title: "Goalkeeper",
-  fields: [
-    { key: "gk_catching" as const, label: "Catching" },
-    { key: "gk_diving"   as const, label: "Diving" },
-    { key: "gk_reflexes" as const, label: "Reflexes" },
-    { key: "gk_reach"    as const, label: "Reach" },
-  ],
+const MENTAL: FieldDef[] = [
+  { key: "aggression",    label: "Aggression" },
+  { key: "anticipation",  label: "Anticipation" },
+  { key: "bravery",       label: "Bravery" },
+  { key: "composure",     label: "Composure" },
+  { key: "concentration", label: "Concentration" },
+  { key: "decisions",     label: "Decisions" },
+  { key: "determination", label: "Determination" },
+  { key: "flair",         label: "Flair" },
+  { key: "leadership",    label: "Leadership" },
+  { key: "off_the_ball",  label: "Off the Ball" },
+  { key: "positioning",   label: "Positioning" },
+  { key: "teamwork",      label: "Teamwork" },
+  { key: "vision",        label: "Vision" },
+  { key: "work_rate",     label: "Work Rate" },
+];
+
+const PHYSICAL: FieldDef[] = [
+  { key: "acceleration",    label: "Acceleration" },
+  { key: "agility",         label: "Agility" },
+  { key: "balance",         label: "Balance" },
+  { key: "jumping_reach",   label: "Jumping Reach" },
+  { key: "natural_fitness", label: "Natural Fitness" },
+  { key: "pace",            label: "Pace" },
+  { key: "stamina",         label: "Stamina" },
+  { key: "strength",        label: "Strength" },
+];
+
+const GOALKEEPING: FieldDef[] = [
+  { key: "gk_aerial_reach",      label: "Aerial Reach" },
+  { key: "gk_command_of_area",   label: "Command of Area" },
+  { key: "gk_communication",     label: "Communication" },
+  { key: "gk_eccentricity",      label: "Eccentricity" },
+  { key: "gk_first_touch",       label: "First Touch" },
+  { key: "gk_handling",          label: "Handling" },
+  { key: "gk_kicking",           label: "Kicking" },
+  { key: "gk_one_on_ones",       label: "One on Ones" },
+  { key: "gk_passing",           label: "Passing" },
+  { key: "gk_tendency_to_punch", label: "Tendency to Punch" },
+  { key: "gk_reflexes",          label: "Reflexes" },
+  { key: "gk_rushing_out",       label: "Rushing Out" },
+  { key: "gk_throwing",          label: "Throwing" },
+];
+
+const GROUPS: { title: string; color: string; fields: FieldDef[] }[] = [
+  { title: "Technical", color: "text-blue-700",   fields: TECHNICAL },
+  { title: "Mental",    color: "text-purple-700", fields: MENTAL },
+  { title: "Physical",  color: "text-green-700",  fields: PHYSICAL },
+];
+
+const GK_GROUP = { title: "Goalkeeping", color: "text-orange-700", fields: GOALKEEPING };
+
+const blank: StatsCardData = {
+  era_label: "", year_from: "", year_to: "", is_verified: false, notes: "",
+  corners: "", crossing: "", dribbling: "", finishing: "", first_touch: "",
+  free_kick_taking: "", heading: "", long_shots: "", long_throws: "", marking: "",
+  passing: "", penalty_taking: "", tackling: "", technique: "",
+  aggression: "", anticipation: "", bravery: "", composure: "", concentration: "",
+  decisions: "", determination: "", flair: "", leadership: "", off_the_ball: "",
+  positioning: "", teamwork: "", vision: "", work_rate: "",
+  acceleration: "", agility: "", balance: "", jumping_reach: "",
+  natural_fitness: "", pace: "", stamina: "", strength: "",
+  gk_aerial_reach: "", gk_command_of_area: "", gk_communication: "", gk_eccentricity: "",
+  gk_first_touch: "", gk_handling: "", gk_kicking: "", gk_one_on_ones: "",
+  gk_passing: "", gk_tendency_to_punch: "", gk_reflexes: "", gk_rushing_out: "",
+  gk_throwing: "",
 };
 
 export default function StatsCardForm({ initialData, action, submitLabel, isGoalkeeper }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState<string | null>(null);
-
-  const blank: StatsCardData = {
-    era_label: "", year_from: "", year_to: "", is_verified: false, notes: "",
-    speed: "", acceleration: "", stamina: "", balance: "", jumping: "", heading: "",
-    attack: "", defense: "", aggression: "", reaction: "",
-    passing: "", dribbling: "", ball_control: "", technique: "", finishing: "",
-    shot_power: "", long_range: "", positioning: "",
-    gk_catching: "", gk_diving: "", gk_reflexes: "", gk_reach: "",
-  };
-
-  const [form, setForm] = useState<StatsCardData>({ ...blank, ...initialData });
+  const [form, setForm]       = useState<StatsCardData>({ ...blank, ...initialData });
 
   function set(field: keyof StatsCardData, value: string | boolean) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -161,15 +205,17 @@ export default function StatsCardForm({ initialData, action, submitLabel, isGoal
       {/* Attribute groups */}
       {groups.map((group) => (
         <div key={group.title}>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">{group.title}</h3>
-          <div className="grid grid-cols-5 gap-3">
+          <h3 className={`text-sm font-semibold mb-3 ${group.color}`}>
+            {group.title} <span className="text-gray-400 font-normal">({group.fields.length})</span>
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
             {group.fields.map((f) => (
               <div key={f.key}>
                 <label className={labelClass}>{f.label}</label>
                 <input
                   type="number"
                   min={1}
-                  max={99}
+                  max={100}
                   className={inputClass}
                   value={form[f.key] as string}
                   onChange={(e) => set(f.key, e.target.value)}

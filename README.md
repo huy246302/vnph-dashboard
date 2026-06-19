@@ -57,7 +57,11 @@ vnph-dashboard
 │  │  │     ├─ layout.tsx
 │  │  │     ├─ nicknames
 │  │  │     │  └─ page.tsx
-│  │  │     └─ page.tsx
+│  │  │     ├─ page.tsx
+│  │  │     └─ stats-cards
+│  │  │        ├─ new
+│  │  │        │  └─ page.tsx
+│  │  │        └─ page.tsx
 │  │  ├─ profiles
 │  │  │  └─ page.tsx
 │  │  └─ trophies
@@ -79,6 +83,7 @@ vnph-dashboard
 │  ├─ RowActions.tsx
 │  ├─ Sidebar.tsx
 │  ├─ StatsCard.tsx
+│  ├─ StatsCardForm.tsx
 │  └─ TableWrapper.tsx
 ├─ eslint.config.mjs
 ├─ lib
@@ -87,6 +92,7 @@ vnph-dashboard
 │  │  ├─ clubs.ts
 │  │  ├─ national-teams.ts
 │  │  ├─ player-nicknames.ts
+│  │  ├─ player-stats-cards.ts
 │  │  ├─ players.ts
 │  │  ├─ profiles.ts
 │  │  └─ trophies.ts
@@ -96,6 +102,7 @@ vnph-dashboard
 │  │  ├─ dashboard.ts
 │  │  ├─ national-team.ts
 │  │  ├─ player-nicknames.ts
+│  │  ├─ player-stats-cards.ts
 │  │  ├─ players.ts
 │  │  ├─ profiles.ts
 │  │  └─ tropies.ts

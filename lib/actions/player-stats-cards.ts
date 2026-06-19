@@ -5,11 +5,21 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const ATTRIBUTE_FIELDS = [
-  "speed","acceleration","stamina","balance","jumping","heading",
-  "attack","defense","aggression","reaction",
-  "passing","dribbling","ball_control","technique","finishing",
-  "shot_power","long_range","positioning",
-  "gk_catching","gk_diving","gk_reflexes","gk_reach",
+  // Technical
+  "corners","crossing","dribbling","finishing","first_touch",
+  "free_kick_taking","heading","long_shots","long_throws","marking",
+  "passing","penalty_taking","tackling","technique",
+  // Mental
+  "aggression","anticipation","bravery","composure","concentration",
+  "decisions","determination","flair","leadership","off_the_ball",
+  "positioning","teamwork","vision","work_rate",
+  // Physical
+  "acceleration","agility","balance","jumping_reach",
+  "natural_fitness","pace","stamina","strength",
+  // Goalkeeping
+  "gk_aerial_reach","gk_command_of_area","gk_communication","gk_eccentricity",
+  "gk_first_touch","gk_handling","gk_kicking","gk_one_on_ones",
+  "gk_passing","gk_tendency_to_punch","gk_reflexes","gk_rushing_out","gk_throwing",
 ] as const;
 
 function num(val: FormDataEntryValue | null) {
