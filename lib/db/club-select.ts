@@ -1,15 +1,5 @@
 import { createClient } from "@/lib/supabase-server";
 
-export async function getClubs() {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("clubs")
-    .select("id, name, short_name, league, stadium, founded_year, logo_url")
-    .order("name");
-  if (error) throw error;
-  return data;
-}
-
 // Lightweight list for use in <select> dropdowns across player sub-resources
 export async function getClubsForSelect() {
   const supabase = await createClient();
