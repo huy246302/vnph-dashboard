@@ -14,40 +14,62 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+type TrophyOption = { id: string; name: string; short_name: string | null };
+type ClubOption = { id: string; name: string; short_name: string | null };
+
+const NATIONAL_TEAM_LABEL = "— National Team —";
+
 export default async function PlayerTrophiesPage({ params }: Props) {
   const { id } = await params;
-  const [entries, trophies, clubs] = await Promise.all([
+  const [entries, trophies, clubs]: [
+    Awaited<ReturnType<typeof getPlayerTrophiesList>>,
+    TrophyOption[],
+    ClubOption[]
+  ] = await Promise.all([
     getPlayerTrophiesList(id),
     getTrophiesForSelect(),
     getClubsForSelect(),
   ]);
 
-  const trophyOptions = trophies.map((t) => t.name);
-  const trophyNameToId = new Map(trophies.map((t) => [t.name, t.id]));
-  const trophyIdToName = new Map(trophies.map((t) => [t.id, t.name]));
+  const trophyOptions = trophies.map((t: TrophyOption) => t.name);
+  const trophyNameToId = new Map(trophies.map((t: TrophyOption) => [t.name, t.id]));
+  const trophyIdToName = new Map(trophies.map((t: TrophyOption) => [t.id, t.name]));
 
-  // Club is optional (NULL = won with national team)
-  const clubOptions = ["— National Team —", ...clubs.map((c) => c.name)];
-  const clubNameToId = new Map(clubs.map((c) => [c.name, c.id]));
-  const clubIdToName = new Map(clubs.map((c) => [c.id, c.name]));
+  const clubOptions = [NATIONAL_TEAM_LABEL, ...clubs.map((c: ClubOption) => c.name)];
+  const clubNameToId = new Map(clubs.map((c: ClubOption) => [c.name, c.id]));
+  const clubIdToName = new Map(clubs.map((c: ClubOption) => [c.id, c.name]));
 
   const boundDelete = deletePlayerTrophy.bind(null, id);
 
   const fields = [
-    { name: "trophy_id", label: "Trophy", required: true, span: 2 as const, type: "select" as const, options: trophyOptions },
-    { name: "club_id",   label: "Club (or National Team)", span: 2 as const, type: "select" as const, options: clubOptions },
-    { name: "year",      label: "Year", type: "number" as const },
-    { name: "notes",     label: "Notes", type: "textarea" as const, span: 2 as const },
+    { name: "trophy_id", label: "Trophy", required: true, span: 2 as const, type: "select" as const, options: trophyOptions, defaultValue: "" },
+    { name: "club_id",   label: "Club (or National Team)", span: 2 as const, type: "select" as const, options: clubOptions, defaultValue: NATIONAL_TEAM_LABEL },
+    { name: "year",      label: "Year", type: "number" as const, defaultValue: "" },
+    { name: "notes",     label: "Notes", type: "textarea" as const, span: 2 as const, defaultValue: "" },
   ];
 
-  function resolveClubId(formData: FormData) {
-    const clubName = formData.get("club_id") as string;
-    if (!clubName || clubName === "— National Team —") {
-      formData.set("club_id", "");
-    } else {
-      const realId = clubNameToId.get(clubName);
-      if (realId) formData.set("club_id", realId);
+  // Named top-level server action — resolves both trophy_id and club_id
+  // from display names back to UUIDs before inserting.
+  async function createTrophyWithResolution(formData: FormData) {
+    "use server";
+
+    const trophyName = formData.get("trophy_id");
+    if (typeof trophyName === "string") {
+      const realTrophyId = trophyNameToId.get(trophyName);
+      if (realTrophyId) formData.set("trophy_id", realTrophyId);
     }
+
+    const clubName = formData.get("club_id");
+    if (typeof clubName === "string") {
+      if (clubName === NATIONAL_TEAM_LABEL || clubName === "") {
+        formData.set("club_id", "");
+      } else {
+        const realClubId = clubNameToId.get(clubName);
+        if (realClubId) formData.set("club_id", realClubId);
+      }
+    }
+
+    await createPlayerTrophy(id, formData);
   }
 
   return (
@@ -60,14 +82,7 @@ export default async function PlayerTrophiesPage({ params }: Props) {
         <CreateButton
           label="Add Trophy"
           modalTitle="Add Trophy"
-          action={async (formData: FormData) => {
-            "use server";
-            const trophyName = formData.get("trophy_id") as string;
-            const realTrophyId = trophyNameToId.get(trophyName);
-            if (realTrophyId) formData.set("trophy_id", realTrophyId);
-            resolveClubId(formData);
-            await createPlayerTrophy(id, formData);
-          }}
+          action={createTrophyWithResolution}
           fields={fields}
         />
       </div>
@@ -92,14 +107,31 @@ export default async function PlayerTrophiesPage({ params }: Props) {
               {entries.map((entry) => {
                 const trophy = entry.trophies as unknown as { name: string } | null;
                 const club = entry.clubs as unknown as { name: string } | null;
-                const boundUpdate = async (formData: FormData) => {
+                const entryId = entry.id;
+
+                // Named top-level server action per row — bound via closure
+                // over entryId only (a primitive string), not over any Map.
+                async function updateTrophyWithResolution(formData: FormData) {
                   "use server";
-                  const trophyName = formData.get("trophy_id") as string;
-                  const realTrophyId = trophyNameToId.get(trophyName);
-                  if (realTrophyId) formData.set("trophy_id", realTrophyId);
-                  resolveClubId(formData);
-                  await updatePlayerTrophy(id, entry.id, formData);
-                };
+
+                  const trophyName = formData.get("trophy_id");
+                  if (typeof trophyName === "string") {
+                    const realTrophyId = trophyNameToId.get(trophyName);
+                    if (realTrophyId) formData.set("trophy_id", realTrophyId);
+                  }
+
+                  const clubName = formData.get("club_id");
+                  if (typeof clubName === "string") {
+                    if (clubName === NATIONAL_TEAM_LABEL || clubName === "") {
+                      formData.set("club_id", "");
+                    } else {
+                      const realClubId = clubNameToId.get(clubName);
+                      if (realClubId) formData.set("club_id", realClubId);
+                    }
+                  }
+
+                  await updatePlayerTrophy(id, entryId, formData);
+                }
 
                 return (
                   <tr key={entry.id} className="hover:bg-gray-50 transition-colors">
@@ -111,15 +143,21 @@ export default async function PlayerTrophiesPage({ params }: Props) {
                         id={entry.id}
                         label={trophy?.name ?? "this trophy"}
                         deleteAction={boundDelete}
-                        updateAction={boundUpdate}
+                        updateAction={updateTrophyWithResolution}
                         fields={fields.map((f) => {
                           if (f.name === "trophy_id") {
                             return { ...f, defaultValue: trophyIdToName.get(entry.trophy_id) ?? "" };
                           }
                           if (f.name === "club_id") {
-                            return { ...f, defaultValue: entry.club_id ? (clubIdToName.get(entry.club_id) ?? "") : "— National Team —" };
+                            return {
+                              ...f,
+                              defaultValue: entry.club_id
+                                ? (clubIdToName.get(entry.club_id) ?? "")
+                                : NATIONAL_TEAM_LABEL,
+                            };
                           }
-                          return { ...f, defaultValue: String(entry[f.name as keyof typeof entry] ?? "") };
+                          const value = entry[f.name as keyof typeof entry];
+                          return { ...f, defaultValue: value === null || value === undefined ? "" : String(value) };
                         })}
                       />
                     </td>
