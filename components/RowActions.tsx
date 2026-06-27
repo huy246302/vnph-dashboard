@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
+import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
   name: string;
   label: string;
-  type?: "text" | "number" | "date" | "textarea" | "select" | "password";
+  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file";
   options?: string[];
   placeholder?: string;
   defaultValue?: string;
   required?: boolean;
   span?: 2;
+  uploadBucket?: UploadBucket;
 };
 
 type Props = {
@@ -21,7 +23,7 @@ type Props = {
   editHref?: string;
   fields?: Field[];
   deleteAction: (id: string) => Promise<void>;
-  updateAction?: (formData: FormData) => Promise<void>; // ← remove id: string
+  updateAction?: (formData: FormData) => Promise<void>;
 };
 
 const inputClass =
@@ -35,6 +37,27 @@ export default function RowActions({
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [loading, setLoading]       = useState(false);
   const [error, setError]           = useState<string | null>(null);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleFileChange(field: Field, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !field.uploadBucket) return;
+
+    setUploadingField(field.name);
+    setError(null);
+    try {
+      const url = await uploadImage(field.uploadBucket, file);
+      setPreviews((prev) => ({ ...prev, [field.name]: url }));
+      const hiddenInput = formRef.current?.elements.namedItem(field.name) as HTMLInputElement | null;
+      if (hiddenInput) hiddenInput.value = url;
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingField(null);
+    }
+  }
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,7 +65,7 @@ export default function RowActions({
     setLoading(true);
     setError(null);
     try {
-      await updateAction(new FormData(e.currentTarget)); // ← no id argument
+      await updateAction(new FormData(e.currentTarget));
       setEditOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -67,7 +90,6 @@ export default function RowActions({
   return (
     <>
       <div className="flex items-center justify-end gap-1">
-        {/* Edit — link or modal depending on whether editHref is provided */}
         {editHref ? (
           <Link
             href={editHref}
@@ -91,17 +113,42 @@ export default function RowActions({
         </button>
       </div>
 
-      {/* Edit Modal — only rendered when using inline edit */}
       {!editHref && fields && updateAction && (
         <Modal open={editOpen} onClose={() => setEditOpen(false)} title="Edit Record">
-          <form onSubmit={handleUpdate} autoComplete="off" className="flex flex-col gap-4">
+          <form ref={formRef} onSubmit={handleUpdate} autoComplete="off" className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-3">
               {fields.map((field) => (
                 <div key={field.name} className={field.span === 2 ? "col-span-2" : ""}>
                   <label className={labelClass}>
                     {field.label} {field.required && <span className="text-red-400">*</span>}
                   </label>
-                  {field.type === "textarea" ? (
+
+                  {field.type === "file" ? (
+                    <div className="flex flex-col gap-2">
+                      <input type="hidden" name={field.name} defaultValue={field.defaultValue} />
+                      <label className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-colors">
+                        <span className="text-base leading-none">📁</span>
+                        <span>{previews[field.name] || field.defaultValue ? "Change image" : "Choose image"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileChange(field, e)}
+                          className="hidden"
+                        />
+                      </label>
+                      {uploadingField === field.name && (
+                        <p className="text-xs text-blue-500">Uploading...</p>
+                      )}
+                      {(previews[field.name] || field.defaultValue) && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={previews[field.name] || field.defaultValue}
+                          alt="Preview"
+                          className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                        />
+                      )}
+                    </div>
+                  ) : field.type === "textarea" ? (
                     <textarea name={field.name} rows={3} placeholder={field.placeholder}
                       defaultValue={field.defaultValue} className={inputClass} />
                   ) : field.type === "select" ? (
@@ -128,7 +175,7 @@ export default function RowActions({
                 className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors">
                 Cancel
               </button>
-              <button type="submit" disabled={loading}
+              <button type="submit" disabled={loading || uploadingField !== null}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors">
                 {loading ? "Saving..." : "Save Changes"}
               </button>
@@ -137,7 +184,6 @@ export default function RowActions({
         </Modal>
       )}
 
-      {/* Delete Confirm Modal */}
       <Modal open={deleteOpen} onClose={() => setDeleteOpen(false)} title="Confirm Delete">
         <div className="flex flex-col gap-4">
           <p className="text-sm text-gray-600">

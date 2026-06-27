@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Img from "next/image";
+import { uploadImage } from "@/lib/actions/storage";
 
 type PlayerFormData = {
   full_name: string;
@@ -48,6 +48,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
   const [activeTab, setActiveTab] = useState<Tab>("Identity");
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState<string | null>(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   const [form, setForm] = useState<PlayerFormData>({
     full_name:         initialData?.full_name         ?? "",
@@ -72,6 +73,22 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
 
   function set(field: keyof PlayerFormData, value: string | boolean) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingPhoto(true);
+    setError(null);
+    try {
+      const url = await uploadImage("player-photos", file);
+      set("profile_image_url", url);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingPhoto(false);
+    }
   }
 
   async function handleSubmit() {
@@ -254,19 +271,27 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
         {activeTab === "Media" && (
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className={labelClass}>Profile Image URL</label>
-              <input className={inputClass} value={form.profile_image_url}
-                onChange={(e) => set("profile_image_url", e.target.value)}
-                placeholder="https://..." />
+              <label className={labelClass}>Profile Photo</label>
+              <label className="flex items-center justify-center gap-2 w-full max-w-sm border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-colors">
+                <span className="text-base leading-none">📁</span>
+                <span>{form.profile_image_url ? "Change photo" : "Choose photo"}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </label>
+              {uploadingPhoto && (
+                <p className="text-xs text-blue-500 mt-2">Uploading...</p>
+              )}
             </div>
             {form.profile_image_url && (
               <div className="col-span-2">
                 <p className={labelClass}>Preview</p>
-                <Img
+                <img
                   src={form.profile_image_url}
                   alt="Profile preview"
-                  width={96}
-                  height={96}
                   className="w-24 h-24 object-cover rounded-xl border border-gray-200"
                   onError={(e) => (e.currentTarget.style.display = "none")}
                 />
@@ -284,7 +309,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
         <div className="flex justify-end mt-6 pt-4 border-t border-gray-100">
           <button
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || uploadingPhoto}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
           >
             {loading ? "Saving..." : submitLabel}

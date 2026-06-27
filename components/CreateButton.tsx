@@ -2,16 +2,18 @@
 
 import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
+import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
   name: string;
   label: string;
-  type?: "text" | "number" | "date" | "textarea" | "select" | "password";
+  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file";
   options?: string[];
   placeholder?: string;
   defaultValue?: string;
   required?: boolean;
   span?: 2;
+  uploadBucket?: UploadBucket; // required when type === "file"
 };
 
 type Props = {
@@ -29,7 +31,28 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const [previews, setPreviews] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleFileChange(field: Field, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !field.uploadBucket) return;
+
+    setUploadingField(field.name);
+    setError(null);
+    try {
+      const url = await uploadImage(field.uploadBucket, file);
+      setPreviews((prev) => ({ ...prev, [field.name]: url }));
+      // Store the resulting URL in a hidden input so it submits with the form
+      const hiddenInput = formRef.current?.elements.namedItem(field.name) as HTMLInputElement | null;
+      if (hiddenInput) hiddenInput.value = url;
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingField(null);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,6 +61,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
     try {
       await action(new FormData(e.currentTarget));
       formRef.current?.reset();
+      setPreviews({});
       setOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -63,7 +87,34 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
                 <label className={labelClass}>
                   {field.label} {field.required && "*"}
                 </label>
-                {field.type === "textarea" ? (
+
+                {field.type === "file" ? (
+                  <div className="flex flex-col gap-2">
+                    {/* Hidden input carries the resulting URL into the FormData */}
+                    <input type="hidden" name={field.name} defaultValue={field.defaultValue} />
+                    <label className="flex items-center justify-center gap-2 w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:border-gray-300 cursor-pointer transition-colors">
+                      <span className="text-base leading-none">📁</span>
+                      <span>{previews[field.name] ? "Change image" : "Choose image"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(field, e)}
+                        className="hidden"
+                      />
+                    </label>
+                    {uploadingField === field.name && (
+                      <p className="text-xs text-blue-500">Uploading...</p>
+                    )}
+                    {previews[field.name] && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={previews[field.name]}
+                        alt="Preview"
+                        className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                      />
+                    )}
+                  </div>
+                ) : field.type === "textarea" ? (
                   <textarea
                     name={field.name}
                     rows={3}
@@ -108,10 +159,10 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || uploadingField !== null}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {loading ? "Saving..." : `Save`}
+              {loading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

@@ -1,4 +1,4 @@
-import Img from "next/image";
+import Image from "next/image";
 import { getClubs } from "@/lib/db/clubs";
 import { createClub, updateClub, deleteClub } from "@/lib/actions/clubs";
 import CreateButton from "@/components/CreateButton";
@@ -14,7 +14,7 @@ const clubFields = [
   { name: "founded_year", label: "Founded Year", type: "number" as const, placeholder: "2010" },
   { name: "stadium",      label: "Stadium",      placeholder: "Sân vận động Hàng Đẫy" },
   { name: "league",       label: "League",       placeholder: "V.League 1" },
-  { name: "logo_url",     label: "Logo URL",     span: 2 as const, placeholder: "https://..." },
+  { name: "logo_url",     label: "Logo",         span: 2 as const, type: "file" as const, uploadBucket: "club-logos" as const },
 ];
 
 export default async function ClubsPage() {
@@ -55,16 +55,15 @@ export default async function ClubsPage() {
             <tbody className="divide-y divide-gray-100">
               {clubs.map((club) => (
                 <tr key={club.id} className="hover:bg-gray-50 transition-colors">
-                  {/* Club name + logo + short name */}
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       {club.logo_url ? (
-                        <Img
+                        <Image
                           src={club.logo_url}
                           alt={club.name}
                           width={28}
                           height={28}
-                          className="w-7 h-7 object-contain rounded"
+                          className="object-contain rounded"
                         />
                       ) : (
                         <div className="w-7 h-7 rounded bg-gray-100 flex items-center justify-center text-gray-400 text-xs font-bold shrink-0">

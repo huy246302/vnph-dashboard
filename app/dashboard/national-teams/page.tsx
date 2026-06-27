@@ -11,7 +11,7 @@ const nationalTeamFields = [
   { name: "name",       label: "Team Name", required: true, span: 2 as const, placeholder: "Việt Nam" },
   { name: "short_name", label: "Short Name", placeholder: "VN" },
   { name: "country",    label: "Country",   required: true, placeholder: "Việt Nam" },
-  { name: "logo_url",   label: "Logo URL",  span: 2 as const, placeholder: "https://..." },
+  { name: "logo_url",   label: "Logo",      span: 2 as const, type: "file" as const, uploadBucket: "national-team-logos" as const },
 ];
 
 export default async function NationalTeamsPage() {
