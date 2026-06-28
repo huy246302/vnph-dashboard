@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
+import DateInput from "@/components/DateInput";
+import { toDisplayDate, toISODate } from "@/lib/date-helpers";
 import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
@@ -39,6 +41,15 @@ export default function RowActions({
   const [error, setError]           = useState<string | null>(null);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [dateValues, setDateValues] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    fields?.forEach((f) => {
+      if (f.type === "date" && f.defaultValue) {
+        initial[f.name] = toDisplayDate(f.defaultValue);
+      }
+    });
+    return initial;
+  });
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleFileChange(field: Field, e: React.ChangeEvent<HTMLInputElement>) {
@@ -65,7 +76,14 @@ export default function RowActions({
     setLoading(true);
     setError(null);
     try {
-      await updateAction(new FormData(e.currentTarget));
+      const formData = new FormData(e.currentTarget);
+      fields?.forEach((field) => {
+        if (field.type === "date") {
+          const displayValue = dateValues[field.name] ?? "";
+          formData.set(field.name, toISODate(displayValue));
+        }
+      });
+      await updateAction(formData);
       setEditOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -148,6 +166,14 @@ export default function RowActions({
                         />
                       )}
                     </div>
+                  ) : field.type === "date" ? (
+                    <DateInput
+                      name={field.name}
+                      value={dateValues[field.name] ?? ""}
+                      onChange={(v) => setDateValues((prev) => ({ ...prev, [field.name]: v }))}
+                      required={field.required}
+                      className={inputClass}
+                    />
                   ) : field.type === "textarea" ? (
                     <textarea name={field.name} rows={3} placeholder={field.placeholder}
                       defaultValue={field.defaultValue} className={inputClass} />

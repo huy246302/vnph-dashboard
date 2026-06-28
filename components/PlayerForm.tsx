@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { uploadImage } from "@/lib/actions/storage";
+import DateInput from "@/components/DateInput";
+import { toDisplayDate, toISODate } from "@/lib/date-helpers";
 
 type PlayerFormData = {
   full_name: string;
@@ -53,7 +55,7 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
   const [form, setForm] = useState<PlayerFormData>({
     full_name:         initialData?.full_name         ?? "",
     short_name:        initialData?.short_name        ?? "",
-    birth_date:        initialData?.birth_date        ?? "",
+    birth_date:        toDisplayDate(initialData?.birth_date) ?? "",
     birth_place:       initialData?.birth_place       ?? "",
     nationality:       initialData?.nationality       ?? "Việt Nam",
     position:          initialData?.position          ?? "",
@@ -101,7 +103,13 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
     setError(null);
     try {
       const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => fd.append(k, String(v)));
+      Object.entries(form).forEach(([k, v]) => {
+        if (k === "birth_date") {
+          fd.append(k, toISODate(v as string));
+        } else {
+          fd.append(k, String(v));
+        }
+      });
       await action(fd);
       router.refresh();
     } catch (err: unknown) {
@@ -154,8 +162,12 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
             </div>
             <div>
               <label className={labelClass}>Birth Date</label>
-              <input type="date" className={inputClass} value={form.birth_date}
-                onChange={(e) => set("birth_date", e.target.value)} />
+              <DateInput
+                name="birth_date"
+                value={form.birth_date}
+                onChange={(v) => set("birth_date", v)}
+                className={inputClass}
+              />
             </div>
             <div>
               <label className={labelClass}>Birth Place</label>

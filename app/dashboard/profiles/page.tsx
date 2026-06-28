@@ -5,6 +5,7 @@ import RowActions from "@/components/RowActions";
 import PageContainer from "@/components/PageContainer";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
+import { toDisplayDate } from "@/lib/date-helpers";
 
 export default async function ProfilesPage() {
   const profiles = await getProfiles();
@@ -28,11 +29,6 @@ export default async function ProfilesPage() {
     label: "Role",
     type: "select" as const,
     options: ["admin", "user"],
-  },
-  {
-    name: "created_at",
-    label: "Created At",
-    type: "date" as const,
   },
 ];
 
@@ -85,7 +81,7 @@ export default async function ProfilesPage() {
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  {new Date(profile.created_at).toLocaleDateString("en-GB")}
+                  {toDisplayDate(profile.created_at?.split("T")[0])}
                 </td>
                 <td className="px-4 py-3">
                   <RowActions

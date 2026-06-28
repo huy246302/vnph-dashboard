@@ -8,6 +8,7 @@ import CreateButton from "@/components/CreateButton";
 import RowActions from "@/components/RowActions";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
+import { toDisplayDate } from "@/lib/date-helpers";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -89,8 +90,8 @@ export default async function NationalTeamPage({ params }: Props) {
                     <td className="px-4 py-3 font-medium text-gray-900">{team?.name ?? "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{entry.caps}</td>
                     <td className="px-4 py-3 text-gray-600">{entry.goals}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{entry.debut_date ?? "—"}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{entry.last_match_date ?? "—"}</td>
+                    <td className="px-4 py-3 text-gray-600 text-xs">{toDisplayDate(entry.debut_date) || "—"}</td>
+                    <td className="px-4 py-3 text-gray-600 text-xs">{toDisplayDate(entry.last_match_date) || "—"}</td>
                     <td className="px-4 py-3 text-right">
                       <RowActions
                         id={entry.id}

@@ -9,6 +9,7 @@ import CreateButton from "@/components/CreateButton";
 import RowActions from "@/components/RowActions";
 import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
+import { toDisplayDate } from "@/lib/date-helpers";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -113,7 +114,7 @@ export default async function ClubHistoryPage({ params }: Props) {
                       )}
                     </td>
                     <td className="px-4 py-3 text-gray-600 text-xs">
-                      {entry.joined_at ?? "?"} – {entry.left_at ?? "present"}
+                      {toDisplayDate(entry.joined_at) || "?"} – {toDisplayDate(entry.left_at) || "present"}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{entry.appearances}</td>
                     <td className="px-4 py-3 text-gray-600">{entry.goals}</td>

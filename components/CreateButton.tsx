@@ -2,6 +2,8 @@
 
 import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
+import DateInput from "@/components/DateInput";
+import { toISODate } from "@/lib/date-helpers";
 import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
@@ -33,6 +35,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
   const [error, setError] = useState<string | null>(null);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [previews, setPreviews] = useState<Record<string, string>>({});
+  const [dateValues, setDateValues] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleFileChange(field: Field, e: React.ChangeEvent<HTMLInputElement>) {
@@ -59,9 +62,18 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
     setLoading(true);
     setError(null);
     try {
-      await action(new FormData(e.currentTarget));
+      const formData = new FormData(e.currentTarget);
+      // Convert any dd/mm/yyyy date fields to ISO before submitting
+      for (const field of fields) {
+        if (field.type === "date") {
+          const displayValue = dateValues[field.name] ?? "";
+          formData.set(field.name, toISODate(displayValue));
+        }
+      }
+      await action(formData);
       formRef.current?.reset();
       setPreviews({});
+      setDateValues({});
       setOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -114,6 +126,14 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
                       />
                     )}
                   </div>
+                ) : field.type === "date" ? (
+                  <DateInput
+                    name={field.name}
+                    value={dateValues[field.name] ?? ""}
+                    onChange={(v) => setDateValues((prev) => ({ ...prev, [field.name]: v }))}
+                    required={field.required}
+                    className={inputClass}
+                  />
                 ) : field.type === "textarea" ? (
                   <textarea
                     name={field.name}
