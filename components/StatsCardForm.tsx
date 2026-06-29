@@ -174,6 +174,25 @@ export default function StatsCardForm({ initialData, action, submitLabel, isGoal
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  // Clamps a numeric attribute input to the 1-100 range as the user types.
+  // Allows an empty string (so the field can be cleared) and rejects
+  // anything non-numeric or out of bounds.
+  function setAttribute(field: keyof StatsCardData, raw: string) {
+    if (raw === "") {
+      set(field, "");
+      return;
+    }
+    const digitsOnly = raw.replace(/[^\d]/g, "");
+    if (digitsOnly === "") {
+      set(field, "");
+      return;
+    }
+    let num = parseInt(digitsOnly, 10);
+    if (num > 100) num = 100;
+    if (num < 0) num = 0;
+    set(field, String(num));
+  }
+
   async function handleSubmit() {
     setLoading(true);
     setError(null);
@@ -250,11 +269,13 @@ export default function StatsCardForm({ initialData, action, submitLabel, isGoal
                 <label className={labelClass}>{f.label}</label>
                 <input
                   type="number"
-                  min={1}
+                  min={0}
                   max={100}
+                  step={1}
                   className={inputClass}
                   value={form[f.key] as string}
-                  onChange={(e) => set(f.key, e.target.value)}
+                  onChange={(e) => setAttribute(f.key, e.target.value)}
+                  onBlur={(e) => setAttribute(f.key, e.target.value)}
                   placeholder="—"
                 />
               </div>

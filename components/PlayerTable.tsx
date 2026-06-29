@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import RowActions from "@/components/RowActions";
 import { deletePlayer } from "@/lib/actions/players";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 type Player = {
   id: string;
@@ -70,9 +71,8 @@ export default function PlayersTable({ players }: Props) {
     <div className="flex flex-col gap-4">
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* Search */}
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -81,7 +81,6 @@ export default function PlayersTable({ players }: Props) {
           />
         </div>
 
-        {/* Position filter */}
         <select
           value={position}
           onChange={(e) => setPosition(e.target.value)}
@@ -93,7 +92,6 @@ export default function PlayersTable({ players }: Props) {
           ))}
         </select>
 
-        {/* Era filter */}
         <select
           value={era}
           onChange={(e) => setEra(e.target.value)}
@@ -105,7 +103,6 @@ export default function PlayersTable({ players }: Props) {
           ))}
         </select>
 
-        {/* Retired filter */}
         <select
           value={retired}
           onChange={(e) => setRetired(e.target.value)}
@@ -116,7 +113,6 @@ export default function PlayersTable({ players }: Props) {
           <option value="true">Retired</option>
         </select>
 
-        {/* Clear */}
         {hasFilters && (
           <button
             onClick={clearFilters}
@@ -126,13 +122,11 @@ export default function PlayersTable({ players }: Props) {
           </button>
         )}
 
-        {/* Result count */}
         <span className="ml-auto text-xs text-gray-400">
           {filtered.length} of {players.length} players
         </span>
       </div>
 
-      {/* Table */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           {filtered.length === 0 ? (
@@ -169,7 +163,6 @@ export default function PlayersTable({ players }: Props) {
                 {filtered.map((player) => (
                   <tr key={player.id} className="hover:bg-gray-50 transition-colors">
 
-                    {/* Name + retired badge */}
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
                         <div>
@@ -191,7 +184,6 @@ export default function PlayersTable({ players }: Props) {
                       </div>
                     </td>
 
-                    {/* Position */}
                     <td className="px-5 py-4">
                       {player.position ? (
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${positionColors[player.position] ?? "bg-gray-100 text-gray-700"}`}>
@@ -200,7 +192,6 @@ export default function PlayersTable({ players }: Props) {
                       ) : <span className="text-gray-400">—</span>}
                     </td>
 
-                    {/* Era */}
                     <td className="px-5 py-4">
                       {player.primary_era ? (
                         <span className="px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs font-medium">
@@ -209,12 +200,10 @@ export default function PlayersTable({ players }: Props) {
                       ) : <span className="text-gray-400">—</span>}
                     </td>
 
-                    {/* Club */}
                     <td className="px-5 py-4 text-gray-600">
                       {player.current_club ?? <span className="text-gray-400">—</span>}
                     </td>
 
-                    {/* Career span */}
                     <td className="px-5 py-4 text-gray-600 text-xs">
                       {player.career_start_year || player.career_end_year ? (
                         <span>
@@ -223,7 +212,6 @@ export default function PlayersTable({ players }: Props) {
                       ) : <span className="text-gray-400">—</span>}
                     </td>
 
-                    {/* Actions */}
                     <td className="px-5 py-4 text-right">
                       <RowActions
                         id={player.id}
