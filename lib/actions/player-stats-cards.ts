@@ -20,6 +20,12 @@ const ATTRIBUTE_FIELDS = [
   "gk_aerial_reach","gk_command_of_area","gk_communication","gk_eccentricity",
   "gk_first_touch","gk_handling","gk_kicking","gk_one_on_ones",
   "gk_passing","gk_tendency_to_punch","gk_reflexes","gk_rushing_out","gk_throwing",
+  // Personality
+  "ambition","controversy","loyalty","pressure",
+  "professionalism","sportsmanship","temperament",
+  // Hidden Performance
+  "consistency","dirtiness","important_matches",
+  "injury_proneness","adaptability","versatility",
 ] as const;
 
 function num(val: FormDataEntryValue | null) {

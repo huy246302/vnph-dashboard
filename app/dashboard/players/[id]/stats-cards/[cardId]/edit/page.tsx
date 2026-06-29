@@ -99,6 +99,23 @@ export default async function EditStatsCardPage({ params }: Props) {
           gk_reflexes:          s(card.gk_reflexes),
           gk_rushing_out:       s(card.gk_rushing_out),
           gk_throwing:          s(card.gk_throwing),
+
+          // Personality (7)
+          ambition:        s(card.ambition),
+          controversy:     s(card.controversy),
+          loyalty:         s(card.loyalty),
+          pressure:        s(card.pressure),
+          professionalism: s(card.professionalism),
+          sportsmanship:   s(card.sportsmanship),
+          temperament:     s(card.temperament),
+
+          // Hidden Performance (6)
+          consistency:       s(card.consistency),
+          dirtiness:         s(card.dirtiness),
+          important_matches: s(card.important_matches),
+          injury_proneness:  s(card.injury_proneness),
+          adaptability:      s(card.adaptability),
+          versatility:       s(card.versatility),
         }}
       />
     </div>

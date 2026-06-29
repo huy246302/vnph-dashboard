@@ -31,6 +31,14 @@ type StatsCardData = {
   gk_kicking: string; gk_one_on_ones: string; gk_passing: string;
   gk_tendency_to_punch: string; gk_reflexes: string; gk_rushing_out: string;
   gk_throwing: string;
+
+  // Personality (7)
+  ambition: string; controversy: string; loyalty: string; pressure: string;
+  professionalism: string; sportsmanship: string; temperament: string;
+
+  // Hidden Performance (6)
+  consistency: string; dirtiness: string; important_matches: string;
+  injury_proneness: string; adaptability: string; versatility: string;
 };
 
 type Props = {
@@ -115,6 +123,28 @@ const GROUPS: { title: string; color: string; fields: FieldDef[] }[] = [
 
 const GK_GROUP = { title: "Goalkeeping", color: "text-orange-700", fields: GOALKEEPING };
 
+const PERSONALITY: FieldDef[] = [
+  { key: "ambition",        label: "Ambition" },
+  { key: "controversy",     label: "Controversy" },
+  { key: "loyalty",         label: "Loyalty" },
+  { key: "pressure",        label: "Pressure" },
+  { key: "professionalism", label: "Professionalism" },
+  { key: "sportsmanship",   label: "Sportsmanship" },
+  { key: "temperament",     label: "Temperament" },
+];
+
+const HIDDEN_PERFORMANCE: FieldDef[] = [
+  { key: "consistency",       label: "Consistency" },
+  { key: "dirtiness",         label: "Dirtiness" },
+  { key: "important_matches", label: "Important Matches" },
+  { key: "injury_proneness",  label: "Injury Proneness" },
+  { key: "adaptability",      label: "Adaptability" },
+  { key: "versatility",       label: "Versatility" },
+];
+
+const PERSONALITY_GROUP = { title: "Personality", color: "text-pink-700", fields: PERSONALITY };
+const HIDDEN_GROUP = { title: "Hidden Performance", color: "text-slate-700", fields: HIDDEN_PERFORMANCE };
+
 const blank: StatsCardData = {
   era_label: "", year_from: "", year_to: "", is_verified: false, notes: "",
   corners: "", crossing: "", dribbling: "", finishing: "", first_touch: "",
@@ -129,6 +159,10 @@ const blank: StatsCardData = {
   gk_first_touch: "", gk_handling: "", gk_kicking: "", gk_one_on_ones: "",
   gk_passing: "", gk_tendency_to_punch: "", gk_reflexes: "", gk_rushing_out: "",
   gk_throwing: "",
+  ambition: "", controversy: "", loyalty: "", pressure: "",
+  professionalism: "", sportsmanship: "", temperament: "",
+  consistency: "", dirtiness: "", important_matches: "",
+  injury_proneness: "", adaptability: "", versatility: "",
 };
 
 export default function StatsCardForm({ initialData, action, submitLabel, isGoalkeeper }: Props) {
@@ -153,7 +187,9 @@ export default function StatsCardForm({ initialData, action, submitLabel, isGoal
     }
   }
 
-  const groups = isGoalkeeper ? [...GROUPS, GK_GROUP] : GROUPS;
+  const groups = isGoalkeeper
+    ? [...GROUPS, GK_GROUP, PERSONALITY_GROUP, HIDDEN_GROUP]
+    : [...GROUPS, PERSONALITY_GROUP, HIDDEN_GROUP];
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col gap-6">
