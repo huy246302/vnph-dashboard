@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { uploadImage } from "@/lib/actions/storage";
 import DateInputDDMMYYYY from "@/components/DateInput";
 import SearchableSelect from "@/components/SearchableSelect";
@@ -33,6 +34,7 @@ type Props = {
   initialData?: Partial<PlayerFormData>;
   action: (formData: FormData) => Promise<void>;
   submitLabel: string;
+  playerId?: string;
 };
 
 const TABS = ["Identity", "Physical", "Career", "Media"] as const;
@@ -47,7 +49,7 @@ const ERA_OPTIONS = [
   "1970s","1980s","1990s","2000s","2010s","2020s",
 ];
 
-export default function PlayerForm({ initialData, action, submitLabel }: Props) {
+export default function PlayerForm({ initialData, action, submitLabel, playerId }: Props) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("Identity");
   const [loading, setLoading]     = useState(false);
@@ -113,9 +115,14 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
         }
       });
       await action(fd);
-      router.refresh();
+
+      toast.success(playerId ? "Player updated successfully!" : "Player created successfully!");
+      router.push("/dashboard/players");
+
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

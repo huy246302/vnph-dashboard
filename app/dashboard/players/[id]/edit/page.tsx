@@ -18,6 +18,7 @@ export default async function EditPlayerPage({ params }: Props) {
     <PlayerForm
       action={action}
       submitLabel="Save Changes"
+      playerId={id}
       initialData={{
         full_name:         player.full_name         ?? "",
         short_name:        player.short_name        ?? "",

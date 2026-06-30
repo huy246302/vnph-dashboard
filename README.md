@@ -57,51 +57,131 @@ Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
 ## Project Structure
 
 ```
-vnph-dashboard/
-├─ app/
-│  ├─ dashboard/                 # All admin pages live here
-│  │  ├─ awards/                 # Awards reference table
-│  │  ├─ clubs/                  # Clubs reference table
-│  │  ├─ national-teams/         # National teams reference table
-│  │  ├─ trophies/               # Trophies reference table
-│  │  ├─ profiles/               # User/admin profiles
-│  │  ├─ players/
-│  │  │  ├─ page.tsx             # Players list (search + filter)
-│  │  │  ├─ new/                 # Create player form
-│  │  │  └─ [id]/                # Player hub — one player's full record
-│  │  │     ├─ layout.tsx        # Shared header + sub-nav tabs
-│  │  │     ├─ edit/             # Edit player identity/physical/career/media
-│  │  │     ├─ nicknames/
-│  │  │     ├─ club-history/
-│  │  │     ├─ national-team/
-│  │  │     ├─ trophies/
-│  │  │     ├─ awards/
-│  │  │     ├─ career-events/
-│  │  │     ├─ media/
-│  │  │     └─ stats-cards/      # FM-style attribute ratings (51 fields)
-│  │  └─ layout.tsx              # Sidebar + page shell
-│  └─ layout.tsx                 # Root layout
-│
-├─ components/                   # Shared UI building blocks
-│  ├─ CreateButton.tsx           # Generic "add new record" modal
-│  ├─ RowActions.tsx             # Generic edit/delete actions per row
-│  ├─ PlayerForm.tsx             # Tabbed player create/edit form
-│  ├─ PlayerSubNav.tsx           # Tab bar inside the player hub
-│  ├─ DateInputDDMMYYYY.tsx      # dd/mm/yyyy date input (replaces native <input type="date">)
-│  └─ ...
-│
-├─ lib/
-│  ├─ db/                        # Read queries — one file per resource
-│  ├─ actions/                   # Server actions (create/update/delete) — one file per resource
-│  ├─ date-helpers.ts            # dd/mm/yyyy <-> ISO conversion utilities
-│  ├─ supabase-server.ts         # Server-side Supabase client (anon key, respects RLS)
-│  └─ supabase-admin.ts          # Admin Supabase client (service role, bypasses RLS)
-│
-├─ supabase/
-│  └─ migrations/                # Numbered SQL migration history — see its own README
-│
-├─ DECISIONS.md                  # Log of non-obvious architecture decisions
-└─ .env.example                  # Required environment variables (no real values)
+vnph-dashboard
+├─ app
+│  ├─ dashboard
+│  │  ├─ awards
+│  │  │  └─ page.tsx
+│  │  ├─ clubs
+│  │  │  └─ page.tsx
+│  │  ├─ layout.tsx
+│  │  ├─ national-teams
+│  │  │  └─ page.tsx
+│  │  ├─ page.tsx
+│  │  ├─ players
+│  │  │  ├─ new
+│  │  │  │  └─ page.tsx
+│  │  │  ├─ page.tsx
+│  │  │  └─ [id]
+│  │  │     ├─ awards
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ career-events
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ club-history
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ edit
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ layout.tsx
+│  │  │     ├─ media
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ national-team
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ nicknames
+│  │  │     │  └─ page.tsx
+│  │  │     ├─ page.tsx
+│  │  │     ├─ stats-cards
+│  │  │     │  ├─ new
+│  │  │     │  │  └─ page.tsx
+│  │  │     │  ├─ page.tsx
+│  │  │     │  └─ [cardId]
+│  │  │     │     └─ edit
+│  │  │     │        └─ page.tsx
+│  │  │     └─ trophies
+│  │  │        └─ page.tsx
+│  │  ├─ profiles
+│  │  │  └─ page.tsx
+│  │  └─ trophies
+│  │     └─ page.tsx
+│  ├─ favicon.ico
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components
+│  ├─ CreateButton.tsx
+│  ├─ DateInput.tsx
+│  ├─ Modal.tsx
+│  ├─ PageContainer.tsx
+│  ├─ PageHeader.tsx
+│  ├─ PlayerForm.tsx
+│  ├─ PlayerSubNav.tsx
+│  ├─ PlayerTable.tsx
+│  ├─ RowActions.tsx
+│  ├─ SearchableSelect.tsx
+│  ├─ Sidebar.tsx
+│  ├─ StatsCard.tsx
+│  ├─ StatsCardForm.tsx
+│  └─ TableWrapper.tsx
+├─ eslint.config.mjs
+├─ lib
+│  ├─ actions
+│  │  ├─ awards.ts
+│  │  ├─ career-events.ts
+│  │  ├─ clubs.ts
+│  │  ├─ national-teams.ts
+│  │  ├─ player-awards.ts
+│  │  ├─ player-club-history.ts
+│  │  ├─ player-media.ts
+│  │  ├─ player-national-team.ts
+│  │  ├─ player-nicknames.ts
+│  │  ├─ player-stats-cards.ts
+│  │  ├─ player-trophies.ts
+│  │  ├─ players.ts
+│  │  ├─ profiles.ts
+│  │  ├─ storage.ts
+│  │  └─ trophies.ts
+│  ├─ countries.ts
+│  ├─ date-helpers.ts
+│  ├─ db
+│  │  ├─ awards.ts
+│  │  ├─ career-events.ts
+│  │  ├─ club-select.ts
+│  │  ├─ clubs.ts
+│  │  ├─ dashboard.ts
+│  │  ├─ national-team.ts
+│  │  ├─ player-awards.ts
+│  │  ├─ player-club-history.ts
+│  │  ├─ player-media.ts
+│  │  ├─ player-national-team.ts
+│  │  ├─ player-nicknames.ts
+│  │  ├─ player-stats-cards.ts
+│  │  ├─ player-trophies.ts
+│  │  ├─ players.ts
+│  │  ├─ profiles.ts
+│  │  └─ tropies.ts
+│  ├─ supabase-admin.ts
+│  ├─ supabase-client.ts
+│  └─ supabase-server.ts
+├─ next.config.ts
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.mjs
+├─ public
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ next.svg
+│  ├─ vercel.svg
+│  └─ window.svg
+├─ README.md
+├─ supabase
+│  └─ migrations
+│     ├─ 001_initial-extended_schema.sql
+│     ├─ 002_sample_reference_data.sql
+│     ├─ 003_revamp_stats_card_fm_attributes.sql
+│     ├─ 004_rls_policies_player_subresources.sql
+│     ├─ 005_storage_bucket_policies.sql
+│     └─ 006_add_personality_hidden_attributes.sql
+└─ tsconfig.json
+
 ```
 
 ### The pattern every resource follows
