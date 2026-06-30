@@ -2,14 +2,16 @@
 
 import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
-import DateInput from "@/components/DateInput";
+import DateInputDDMMYYYY from "@/components/DateInput";
+import SearchableSelect from "@/components/SearchableSelect";
 import { toISODate } from "@/lib/date-helpers";
+import { COUNTRIES } from "@/lib/countries";
 import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
   name: string;
   label: string;
-  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file";
+  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file" | "country";
   options?: string[];
   placeholder?: string;
   defaultValue?: string;
@@ -36,6 +38,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [previews, setPreviews] = useState<Record<string, string>>({});
   const [dateValues, setDateValues] = useState<Record<string, string>>({});
+  const [countryValues, setCountryValues] = useState<Record<string, string>>({});
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleFileChange(field: Field, e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,6 +77,7 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
       formRef.current?.reset();
       setPreviews({});
       setDateValues({});
+      setCountryValues({});
       setOpen(false);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -126,8 +130,18 @@ export default function CreateButton({ label, modalTitle, fields, action }: Prop
                       />
                     )}
                   </div>
+                ) : field.type === "country" ? (
+                  <SearchableSelect
+                    name={field.name}
+                    value={countryValues[field.name] ?? field.defaultValue ?? ""}
+                    onChange={(v) => setCountryValues((prev) => ({ ...prev, [field.name]: v }))}
+                    options={COUNTRIES}
+                    placeholder="Type to search country..."
+                    required={field.required}
+                    className={inputClass}
+                  />
                 ) : field.type === "date" ? (
-                  <DateInput
+                  <DateInputDDMMYYYY
                     name={field.name}
                     value={dateValues[field.name] ?? ""}
                     onChange={(v) => setDateValues((prev) => ({ ...prev, [field.name]: v }))}

@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { useState, useRef } from "react";
 import Modal from "@/components/Modal";
-import DateInput from "@/components/DateInput";
+import DateInputDDMMYYYY from "@/components/DateInput";
+import SearchableSelect from "@/components/SearchableSelect";
 import { toDisplayDate, toISODate } from "@/lib/date-helpers";
+import { COUNTRIES } from "@/lib/countries";
 import { uploadImage, type UploadBucket } from "@/lib/actions/storage";
 
 type Field = {
   name: string;
   label: string;
-  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file";
+  type?: "text" | "number" | "date" | "textarea" | "select" | "password" | "file" | "country";
   options?: string[];
   placeholder?: string;
   defaultValue?: string;
@@ -46,6 +48,15 @@ export default function RowActions({
     fields?.forEach((f) => {
       if (f.type === "date" && f.defaultValue) {
         initial[f.name] = toDisplayDate(f.defaultValue);
+      }
+    });
+    return initial;
+  });
+  const [countryValues, setCountryValues] = useState<Record<string, string>>(() => {
+    const initial: Record<string, string> = {};
+    fields?.forEach((f) => {
+      if (f.type === "country" && f.defaultValue) {
+        initial[f.name] = f.defaultValue;
       }
     });
     return initial;
@@ -166,8 +177,18 @@ export default function RowActions({
                         />
                       )}
                     </div>
+                  ) : field.type === "country" ? (
+                    <SearchableSelect
+                      name={field.name}
+                      value={countryValues[field.name] ?? field.defaultValue ?? ""}
+                      onChange={(v) => setCountryValues((prev) => ({ ...prev, [field.name]: v }))}
+                      options={COUNTRIES}
+                      placeholder="Type to search country..."
+                      required={field.required}
+                      className={inputClass}
+                    />
                   ) : field.type === "date" ? (
-                    <DateInput
+                    <DateInputDDMMYYYY
                       name={field.name}
                       value={dateValues[field.name] ?? ""}
                       onChange={(v) => setDateValues((prev) => ({ ...prev, [field.name]: v }))}

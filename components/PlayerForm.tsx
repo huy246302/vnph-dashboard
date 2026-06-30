@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { uploadImage } from "@/lib/actions/storage";
-import DateInput from "@/components/DateInput";
+import DateInputDDMMYYYY from "@/components/DateInput";
+import SearchableSelect from "@/components/SearchableSelect";
 import { toDisplayDate, toISODate } from "@/lib/date-helpers";
+import { COUNTRIES } from "@/lib/countries";
 
 type PlayerFormData = {
   full_name: string;
@@ -156,13 +158,18 @@ export default function PlayerForm({ initialData, action, submitLabel }: Props) 
             </div>
             <div>
               <label className={labelClass}>Nationality</label>
-              <input className={inputClass} value={form.nationality}
-                onChange={(e) => set("nationality", e.target.value)}
-                placeholder="Việt Nam" />
+              <SearchableSelect
+                name="nationality"
+                value={form.nationality}
+                onChange={(v) => set("nationality", v)}
+                options={COUNTRIES}
+                placeholder="Type to search country..."
+                className={inputClass}
+              />
             </div>
             <div>
               <label className={labelClass}>Birth Date</label>
-              <DateInput
+              <DateInputDDMMYYYY
                 name="birth_date"
                 value={form.birth_date}
                 onChange={(v) => set("birth_date", v)}
