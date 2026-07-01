@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getPlayers() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("players")
     .select("*")
@@ -11,7 +11,7 @@ export async function getPlayers() {
 }
 
 export async function getPlayerById(id: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("players")
     .select("*")

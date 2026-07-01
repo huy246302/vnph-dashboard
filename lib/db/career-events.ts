@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getPlayerCareerEvents(playerId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("career_events")
     .select("id, player_id, event_year, event_month, title, description, event_type")

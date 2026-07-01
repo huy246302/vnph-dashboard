@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getPlayerStatsCards(playerId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("player_stats_card")
     .select("*")
@@ -12,7 +12,7 @@ export async function getPlayerStatsCards(playerId: string) {
 }
 
 export async function getStatsCardById(cardId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("player_stats_card")
     .select("*")

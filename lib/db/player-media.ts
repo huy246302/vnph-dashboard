@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getPlayerMedia(playerId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("player_media")
     .select("id, player_id, image_url, caption, year, media_type")

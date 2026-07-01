@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getPlayerTrophiesList(playerId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("player_trophies")
     .select(`
@@ -16,7 +16,7 @@ export async function getPlayerTrophiesList(playerId: string) {
 }
 
 export async function getTrophiesForSelect() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("trophies")
     .select("id, name, short_name")

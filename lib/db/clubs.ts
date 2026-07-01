@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase-server";
+import { createAdminClient } from "@/lib/supabase-admin";
 
 export async function getClubs() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("clubs")
     .select("id, name, short_name, league, stadium, founded_year, logo_url")
@@ -12,7 +12,7 @@ export async function getClubs() {
 
 // Lightweight list for use in <select> dropdowns across player sub-resources
 export async function getClubsForSelect() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from("clubs")
     .select("id, name, short_name")
