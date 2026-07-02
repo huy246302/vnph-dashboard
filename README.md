@@ -59,6 +59,11 @@ Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
 ```
 vnph-dashboard
 ├─ app
+│  ├─ auth
+│  │  ├─ callback
+│  │  │  └─ route.ts
+│  │  └─ signout
+│  │     └─ route.ts
 │  ├─ dashboard
 │  │  ├─ awards
 │  │  │  └─ page.tsx
@@ -105,7 +110,11 @@ vnph-dashboard
 │  ├─ favicon.ico
 │  ├─ globals.css
 │  ├─ layout.tsx
-│  └─ page.tsx
+│  ├─ login
+│  │  └─ page.tsx
+│  ├─ page.tsx
+│  └─ register
+│     └─ page.tsx
 ├─ components
 │  ├─ CreateButton.tsx
 │  ├─ DateInput.tsx
@@ -124,6 +133,7 @@ vnph-dashboard
 ├─ eslint.config.mjs
 ├─ lib
 │  ├─ actions
+│  │  ├─ auth.ts
 │  │  ├─ awards.ts
 │  │  ├─ career-events.ts
 │  │  ├─ clubs.ts
@@ -160,7 +170,9 @@ vnph-dashboard
 │  │  └─ tropies.ts
 │  ├─ supabase-admin.ts
 │  ├─ supabase-client.ts
+│  ├─ supabase-middleware.ts
 │  └─ supabase-server.ts
+├─ middleware.ts
 ├─ next.config.ts
 ├─ package-lock.json
 ├─ package.json
@@ -179,7 +191,10 @@ vnph-dashboard
 │     ├─ 003_revamp_stats_card_fm_attributes.sql
 │     ├─ 004_rls_policies_player_subresources.sql
 │     ├─ 005_storage_bucket_policies.sql
-│     └─ 006_add_personality_hidden_attributes.sql
+│     ├─ 006_add_personality_hidden_attributes.sql
+│     ├─ 007_profiles_status_and_auth_trigger.sql
+│     ├─ 008_tighten_rls_with_status.sql
+│     └─ 009_restrict_reads_to_approved.sql
 └─ tsconfig.json
 
 ```
