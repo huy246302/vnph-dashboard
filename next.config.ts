@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  env: {
+    NEXT_PUBLIC_GIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
+    NEXT_PUBLIC_DEPLOYED_AT: new Date().toISOString(),
+  },
 };
 
 export default nextConfig;
