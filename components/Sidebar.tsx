@@ -28,6 +28,22 @@ type SidebarProps = {
   userRole?: string;
 };
 
+function VersionBadge() {
+  const sha = process.env.NEXT_PUBLIC_GIT_SHA;
+  if (!sha) return null;
+
+  return (
+    <a
+      href={`https://github.com/huy246302/vnph-dashboard/commit/${sha}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-[10px] text-gray-400 hover:underline px-3"
+    >
+      v{sha.slice(0, 7)}
+    </a>
+  );
+}
+
 export default function Sidebar({ userEmail, userName, userRole }: SidebarProps) {
   const pathname = usePathname();
   return (
@@ -92,6 +108,7 @@ export default function Sidebar({ userEmail, userName, userRole }: SidebarProps)
             Sign out
           </button>
         </form>
+        <VersionBadge />
       </div>
     </aside>
   );
