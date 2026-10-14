@@ -8,6 +8,7 @@ import DateInputDDMMYYYY from "@/components/DateInput";
 import SearchableSelect from "@/components/SearchableSelect";
 import { toDisplayDate, toISODate } from "@/lib/date-helpers";
 import { COUNTRIES } from "@/lib/countries";
+import Image from "next/image";
 
 type PlayerFormData = {
   full_name: string;
@@ -61,7 +62,7 @@ export default function PlayerForm({ initialData, action, submitLabel, playerId 
     short_name:        initialData?.short_name        ?? "",
     birth_date:        toDisplayDate(initialData?.birth_date) ?? "",
     birth_place:       initialData?.birth_place       ?? "",
-    nationality:       initialData?.nationality       ?? "Việt Nam",
+    nationality:       initialData?.nationality       ?? "England",
     position:          initialData?.position          ?? "",
     height_cm:         initialData?.height_cm         ?? "",
     weight_kg:         initialData?.weight_kg         ?? "",
@@ -155,13 +156,13 @@ export default function PlayerForm({ initialData, action, submitLabel, playerId 
               <label className={labelClass}>Full Name <span className="text-red-400">*</span></label>
               <input className={inputClass} value={form.full_name}
                 onChange={(e) => set("full_name", e.target.value)}
-                placeholder="Nguyễn Văn A" />
+                placeholder="Leonel Messi" />
             </div>
             <div>
               <label className={labelClass}>Short Name</label>
               <input className={inputClass} value={form.short_name}
                 onChange={(e) => set("short_name", e.target.value)}
-                placeholder="Văn A" />
+                placeholder="Leo" />
             </div>
             <div>
               <label className={labelClass}>Nationality</label>
@@ -187,14 +188,14 @@ export default function PlayerForm({ initialData, action, submitLabel, playerId 
               <label className={labelClass}>Birth Place</label>
               <input className={inputClass} value={form.birth_place}
                 onChange={(e) => set("birth_place", e.target.value)}
-                placeholder="Hà Nội" />
+                placeholder="Rosario" />
             </div>
             <div>
               <label className={labelClass}>Position</label>
               <select className={inputClass} value={form.position}
                 onChange={(e) => set("position", e.target.value)}>
                 <option value="">— Select —</option>
-                {["Thủ môn","Hậu vệ","Tiền vệ","Tiền đạo"].map((p) => (
+                {["Goalkeeper","Defender","Midfielder","Forward"].map((p) => (
                   <option key={p} value={p}>{p}</option>
                 ))}
               </select>
@@ -315,7 +316,7 @@ export default function PlayerForm({ initialData, action, submitLabel, playerId 
             {form.profile_image_url && (
               <div className="col-span-2">
                 <p className={labelClass}>Preview</p>
-                <img
+                <Image
                   src={form.profile_image_url}
                   alt="Profile preview"
                   className="w-24 h-24 object-cover rounded-xl border border-gray-200"

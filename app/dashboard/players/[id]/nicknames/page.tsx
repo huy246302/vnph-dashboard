@@ -37,7 +37,7 @@ export default async function NicknamesPage({ params }: Props) {
               label: "Nickname",
               required: true,
               span: 2,
-              placeholder: "Cậu bé vàng",
+              placeholder: "Golden boy",
             },
           ]}
         />
@@ -80,7 +80,7 @@ export default async function NicknamesPage({ params }: Props) {
                             required: true,
                             span: 2,
                             defaultValue: n.nickname,
-                            placeholder: "Cậu bé vàng",
+                            placeholder: "Golden boy",
                           },
                         ]}
                       />

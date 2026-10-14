@@ -10,10 +10,10 @@ type Props = {
 };
 
 const positionColors: Record<string, string> = {
-  "Thủ môn": "bg-yellow-100 text-yellow-800",
-  "Tiền đạo": "bg-red-100 text-red-800",
-  "Hậu vệ":  "bg-blue-100 text-blue-800",
-  "Tiền vệ": "bg-green-100 text-green-800",
+  "Goalkeeper": "bg-yellow-100 text-yellow-800",
+  "Forward": "bg-red-100 text-red-800",
+  "Defender":  "bg-blue-100 text-blue-800",
+  "Midfielder": "bg-green-100 text-green-800",
 };
 
 export default async function PlayerLayout({ children, params }: Props) {
@@ -65,7 +65,7 @@ export default async function PlayerLayout({ children, params }: Props) {
                     Retired
                   </span>
                 )}
-                {player.nationality && player.nationality !== "Việt Nam" && (
+                {player.nationality && player.nationality !== "England" && (
                   <span className="px-2 py-0.5 rounded text-xs bg-orange-50 text-orange-600 font-medium shrink-0">
                     {player.nationality}
                   </span>

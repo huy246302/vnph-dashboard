@@ -28,14 +28,14 @@ export default async function ProfilesPage() {
       name: "username",
       label: "Username",
       required: true,
-      placeholder: "nguyenvana",
+      placeholder: "LeonelMessi",
     },
     {
       name: "full_name",
       label: "Full Name",
       required: true,
       span: 2 as const,
-      placeholder: "Nguyễn Văn A",
+      placeholder: "Leonel Messi",
     },
     {
       name: "role",
@@ -61,8 +61,8 @@ export default async function ProfilesPage() {
           fields={[
             { name: "email", label: "Email", required: true, span: 2, placeholder: "user@example.com" },
             { name: "password", label: "Password", type: "password", required: true, span: 2, placeholder: "Min 6 characters" },
-            { name: "username", label: "Username", placeholder: "nguyen_van_a" },
-            { name: "full_name", label: "Full Name", placeholder: "Nguyễn Văn A" },
+            { name: "username", label: "Username", placeholder: "leonel_messi" },
+            { name: "full_name", label: "Full Name", placeholder: "Leonel Messi" },
             { name: "role", label: "Role", type: "select", options: ["user", "admin"] },
             { name: "avatar_url", label: "Avatar URL", span: 2, placeholder: "https://..." },
           ]}

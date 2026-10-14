@@ -118,7 +118,7 @@ export default function RegisterPage() {
               className={inputClass}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="Nguyễn Văn A"
+              placeholder="Leonel Messi"
             />
           </div>
           <div>

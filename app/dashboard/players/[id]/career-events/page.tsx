@@ -33,7 +33,7 @@ export default async function CareerEventsPage({ params }: Props) {
   const boundDelete = deleteCareerEvent.bind(null, id);
 
   const fields = [
-    { name: "title",       label: "Title",       required: true, span: 2 as const, placeholder: "Gia nhập CLB Hà Nội FC" },
+    { name: "title",       label: "Title",       required: true, span: 2 as const, placeholder: "Join Club" },
     { name: "event_year",  label: "Year",        required: true, type: "number" as const },
     { name: "event_month", label: "Month (1-12)", type: "number" as const },
     { name: "event_type",  label: "Type",        type: "select" as const, options: EVENT_TYPE_OPTIONS },

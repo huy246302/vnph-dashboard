@@ -9,11 +9,11 @@ import TableWrapper from "@/components/TableWrapper";
 
 // Single source of truth for club fields — used by both CreateButton and RowActions
 const clubFields = [
-  { name: "name",         label: "Club Name",    required: true, span: 2 as const, placeholder: "Hà Nội FC" },
-  { name: "short_name",   label: "Short Name",   placeholder: "HN" },
-  { name: "founded_year", label: "Founded Year", type: "number" as const, placeholder: "2010" },
-  { name: "stadium",      label: "Stadium",      placeholder: "Sân vận động Hàng Đẫy" },
-  { name: "league",       label: "League",       placeholder: "V.League 1" },
+  { name: "name",         label: "Club Name",    required: true, span: 2 as const, placeholder: "Manchester United FC" },
+  { name: "short_name",   label: "Short Name",   placeholder: "MU" },
+  { name: "founded_year", label: "Founded Year", type: "number" as const, placeholder: "1874" },
+  { name: "stadium",      label: "Stadium",      placeholder: "Old Trafford" },
+  { name: "league",       label: "League",       placeholder: "Premier League" },
   { name: "logo_url",     label: "Logo",         span: 2 as const, type: "file" as const, uploadBucket: "club-logos" as const },
 ];
 

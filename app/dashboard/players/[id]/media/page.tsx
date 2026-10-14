@@ -21,8 +21,8 @@ export default async function PlayerMediaPage({ params }: Props) {
   const boundDelete = deletePlayerMedia.bind(null, id);
 
   const fields = [
-    { name: "image_url",  label: "Image URL", required: true, span: 2 as const, placeholder: "https://..." },
-    { name: "caption",    label: "Caption",   span: 2 as const, placeholder: "Ăn mừng bàn thắng tại V.League 2013" },
+    { name: "image_url",  label: "Image URL", required: true, span: 2 as const},
+    { name: "caption",    label: "Caption",   span: 2 as const},
     { name: "year",       label: "Year",      type: "number" as const },
     { name: "media_type", label: "Type",      type: "select" as const, options: ["photo", "video_thumbnail"] },
   ];

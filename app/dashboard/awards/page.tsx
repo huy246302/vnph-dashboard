@@ -23,8 +23,8 @@ const SCOPE_COLORS: Record<string, string> = {
 };
 
 const awardFields = [
-  { name: "name",        label: "Award Name",  required: true, span: 2 as const, placeholder: "Quả Bóng Vàng Việt Nam" },
-  { name: "short_name",  label: "Short Name",  placeholder: "QBV" },
+  { name: "name",        label: "Award Name",  required: true, span: 2 as const, placeholder: "Golden Ball" },
+  { name: "short_name",  label: "Short Name" },
   { name: "scope",       label: "Scope",       type: "select" as const, options: SCOPE_OPTIONS },
   { name: "description", label: "Description", type: "textarea" as const, span: 2 as const, placeholder: "Annual award for the best Vietnamese footballer..." },
 ];

@@ -14,7 +14,7 @@ export default async function NewStatsCardPage({ params }: Props) {
   if (!player) notFound();
 
   const action = createStatsCard.bind(null, id);
-  const isGoalkeeper = player.position === "Thủ môn";
+  const isGoalkeeper = player.position === "Goalkeeper";
 
   return (
     <div className="flex flex-col gap-6">

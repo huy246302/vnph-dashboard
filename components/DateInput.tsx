@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { isValidDisplayDate } from "@/lib/date-helpers";
 
 type Props = {
@@ -21,16 +21,10 @@ type Props = {
 export default function DateInput({
   name, value, onChange, placeholder = "dd/mm/yyyy", className, required,
 }: Props) {
-  const [localValue, setLocalValue] = useState(value);
   const [touched, setTouched] = useState(false);
 
-  useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
-
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    let raw = e.target.value.replace(/[^\d]/g, ""); // strip everything but digits
-    if (raw.length > 8) raw = raw.slice(0, 8);
+    const raw = e.target.value.replace(/\D/g, "").slice(0, 8);
 
     let formatted = raw;
     if (raw.length > 4) {
@@ -39,11 +33,10 @@ export default function DateInput({
       formatted = `${raw.slice(0, 2)}/${raw.slice(2)}`;
     }
 
-    setLocalValue(formatted);
     onChange(formatted);
   }
 
-  const showError = touched && localValue.length === 10 && !isValidDisplayDate(localValue);
+  const showError = touched && value.length === 10 && !isValidDisplayDate(value);
 
   return (
     <div>
@@ -51,7 +44,7 @@ export default function DateInput({
         type="text"
         name={name}
         inputMode="numeric"
-        value={localValue}
+        value={value}
         onChange={handleChange}
         onBlur={() => setTouched(true)}
         placeholder={placeholder}

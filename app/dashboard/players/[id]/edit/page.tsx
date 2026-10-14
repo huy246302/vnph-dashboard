@@ -24,7 +24,7 @@ export default async function EditPlayerPage({ params }: Props) {
         short_name:        player.short_name        ?? "",
         birth_date:        player.birth_date        ?? "",
         birth_place:       player.birth_place       ?? "",
-        nationality:       player.nationality       ?? "Việt Nam",
+        nationality:       player.nationality       ?? "England",
         position:          player.position          ?? "",
         height_cm:         String(player.height_cm  ?? ""),
         weight_kg:         String(player.weight_kg  ?? ""),

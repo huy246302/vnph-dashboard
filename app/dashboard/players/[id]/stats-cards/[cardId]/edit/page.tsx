@@ -24,7 +24,7 @@ export default async function EditStatsCardPage({ params }: Props) {
   if (!player || !card) notFound();
 
   const action = updateStatsCard.bind(null, id, cardId);
-  const isGoalkeeper = player.position === "Thủ môn";
+  const isGoalkeeper = player.position === "Goalkeeper";
 
   return (
     <div className="flex flex-col gap-6">

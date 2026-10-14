@@ -8,9 +8,9 @@ import PageHeader from "@/components/PageHeader";
 import TableWrapper from "@/components/TableWrapper";
 
 const nationalTeamFields = [
-  { name: "name",       label: "Team Name", required: true, span: 2 as const, placeholder: "Việt Nam" },
-  { name: "short_name", label: "Short Name", placeholder: "VN" },
-  { name: "country",    label: "Country",   required: true, placeholder: "Việt Nam" },
+  { name: "name",       label: "Team Name", required: true, span: 2 as const, placeholder: "England" },
+  { name: "short_name", label: "Short Name", placeholder: "ENG" },
+  { name: "country",    label: "Country",   required: true, placeholder: "England" },
   { name: "logo_url",   label: "Logo",      span: 2 as const, type: "file" as const, uploadBucket: "national-team-logos" as const },
 ];
 
