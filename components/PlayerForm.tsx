@@ -194,7 +194,7 @@ export default function PlayerForm({ initialData, action, submitLabel, playerId 
               <select className={inputClass} value={form.position}
                 onChange={(e) => set("position", e.target.value)}>
                 <option value="">— Select —</option>
-                {["Thủ môn","Hậu vệ","Tiền vệ","Tiền đạo"].map((p) => (
+                {["Goalkeeper", "Defender", "Midfielder", "Forward"].map((p) => (
                   <option key={p} value={p}>{p}</option>
                 ))}
               </select>
